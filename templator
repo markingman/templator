@@ -101,7 +101,7 @@ switch ((string)@$opts['cmd']) {
 		$Dev->makeDevServer();
 		break;
 	case 'make-dev-example':
-		$Dev->makeExample();
+		$Dev->makeDevExample();
 		break;
 	case 'make-example':
 		$Dev->makeExample();
