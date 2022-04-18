@@ -278,13 +278,13 @@ __
 <?php
 
 // Get test data like this:
-// \$data = \$View->get_view(dev/data/test.php);
+// \$data = \$View->get(dev/data/test.php);
 
 // Call a view template like this:
-// \$content = \$View->get_view(example.php, \$data);
+// \$content = \$View->get(example.php, \$data);
 
 // Combine templates like this:
-// echo \$View->get_view(template.php, 'content' => content.php);
+// echo \$View->get(template.php, ['content' => $content]);
 
 // See tmpl.valhalla.software for more examples.
 
