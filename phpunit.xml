@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- E.g: vendor/phpunit/phpunit/phpunit tests -->
+<phpunit bootstrap="tests/bootstrap.php">
+	<testsuites>
+		<testsuite name="Templator Test Suite">
+		  <file>tests/ViewTest.php</file>
+		  <file>tests/ViewHTMLTest.php</file>
+		</testsuite>
+	</testsuites>
+</phpunit>

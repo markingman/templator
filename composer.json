@@ -1,0 +1,19 @@
+{
+	"name": "markingman/templator",
+	"config": {
+        "vendor-dir": "vendor"
+    },
+    "require": {
+        "php": ">=8"
+    },
+    "require-dev": {
+		"tedivm/jshrink": "~1.0",
+		"phpunit/phpunit": "9.5.20"
+	},
+    "autoload-dev": {
+        "psr-4": {
+            "Templator\\": "src/"
+        },
+	    "files": ["src/function.vx.php"]
+    }
+}
