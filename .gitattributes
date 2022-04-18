@@ -1,12 +1,10 @@
-.gitattributes    export-ignore
-.gitignore        export-ignore
-/.github          export-ignore
-
-/Dev.php          export-ignore
-/DevServer.php    export-ignore
-/function.vx.php  export-ignore
-
-/templator        export-ignore
-/tests            export-ignore
-/phpunit.xml      export-ignore
-composer.lock     export-ignore
+.gitattributes        export-ignore
+.gitignore            export-ignore
+/.github              export-ignore
+/phpunit.xml          export-ignore
+/src/Dev.php          export-ignore
+/src/DevServer.php    export-ignore
+/src/function.vx.php  export-ignore
+/templator            export-ignore
+/tests                export-ignore
+composer.lock         export-ignore
