@@ -2,9 +2,5 @@
 .gitignore            export-ignore
 /.github              export-ignore
 /phpunit.xml          export-ignore
-/src/Dev.php          export-ignore
-/src/DevServer.php    export-ignore
-/src/function.vx.php  export-ignore
-/templator            export-ignore
 /tests                export-ignore
 composer.lock         export-ignore
