@@ -341,13 +341,6 @@ __
 	public function makeJS(string $path = 'css', bool $min = false, bool $nomap = false)
 	{
 		$dir = rtrim($this->tmpl_dir . trim($path, '/'), '/');
-// 		$opts = getopt('', ['min::', 'nomap::']);
-// 
-// 		$dir = realpath(__DIR__ . '/../js');
-// 		$vendor = __DIR__ . '/../vendor';
-// 
-// 		$nomap = isset($opts['nomap']);//Remove sourceMappingURL declaration
-// 		$min = isset($opts['min']);
 
 		foreach (glob($dir . '/*.js.php') as $file) {
 			$files = include $file;
