@@ -41,6 +41,22 @@ if (@\$var === true) {
 
 __
 		);
+
+		file_put_contents(static::$tmpdir . '/vars2.php', <<<__
+<?php
+
+return 10;
+
+__
+		);
+
+		file_put_contents(static::$tmpdir . '/vars2.1.php', <<<__
+<?php
+
+return 1;
+
+__
+		);
 	}
 
 	public function setUp(): void
@@ -79,6 +95,24 @@ __
 		$view = 'vars1.php';
 		$res = $this->View->get($view, ['var' => true]);
 		$this->assertTrue($res === 'TRUE');
+	}
+
+	public function testTemplateVarsOb(): void
+	{
+		$view = 'vars2.php';
+		$res = $this->View->get($view, null, false);
+		$this->assertTrue($res === 10);
+
+		$res = $this->View->get($view, null, true);
+		$this->assertTrue($res === 10);
+
+		$view = 'vars2.1.php';
+		$res = $this->View->get($view, null, false);
+		$this->assertTrue($res === 1);
+
+		// assume ob doesn't work if result might be === 1
+		$res = $this->View->get($view, null, true);
+		$this->assertTrue($res === '');
 	}
 
 	public static function tearDownAfterClass(): void
