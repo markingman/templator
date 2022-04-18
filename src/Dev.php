@@ -13,8 +13,8 @@ class Dev
 
 	public function __construct(string $tmpl_dir, string $http_dir)
 	{
-		$this->tmpl_dir = rtrim($tmpl_dir, DIRECTORY_SEPARATOR);
-		$this->http_dir = rtrim($http_dir, DIRECTORY_SEPARATOR);
+		$this->http_dir = realpath($http_dir);
+		$this->tmpl_dir = realpath($tmpl_dir);
 
 		foreach (['tmpl_dir', 'http_dir'] as $d) {
 			if (!is_dir($this->$d) or !is_readable($this->$d)) {
@@ -28,8 +28,8 @@ class Dev
 	public function makeDevServer()
 	{
 		$here = __DIR__;
-		$http_dir = realpath($this->http_dir) . DIRECTORY_SEPARATOR;
-		$tmpl_dir = realpath($this->tmpl_dir) . DIRECTORY_SEPARATOR;
+		$http_dir = $this->http_dir . DIRECTORY_SEPARATOR;
+		$tmpl_dir = $this->tmpl_dir . DIRECTORY_SEPARATOR;
 		if (strpos($here, $http_dir) === 0) {
 			$here = substr($here, strlen($http_dir));
 		}
@@ -183,8 +183,8 @@ __
 
 		foreach (['js', 'css', 'img'] as $d) {
 			try {
-				if (!is_dir($this->tmpl_dir . '/' . $d)) {
-					mkdir($this->tmpl_dir . '/' . $d);
+				if (!is_dir($this->tmpl_dir . DIRECTORY_SEPARATOR . $d)) {
+					mkdir($this->tmpl_dir . DIRECTORY_SEPARATOR . $d);
 				}
 			} catch (Exception $e) {
 				throw new Exception(sprintf('Could not create %s directory' . $e->getMessage(), $d));
@@ -240,8 +240,8 @@ __
 	public function makeDevExample()
 	{
 		foreach (['dev', 'dev/pages', 'dev/data', 'dev/assets'] as $d) {
-			if (!is_dir($this->tmpl_dir . '/' . $d)) {
-				mkdir($this->tmpl_dir . '/' . $d);
+			if (!is_dir($this->tmpl_dir . DIRECTORY_SEPARATOR . $d)) {
+				mkdir($this->tmpl_dir . DIRECTORY_SEPARATOR . $d);
 			}
 		}
 
@@ -296,7 +296,7 @@ __
 
 	public function makeCSS(string $path = 'css', bool $min = false)
 	{
-		$dir = rtrim($this->tmpl_dir . trim($path, '/'), '/');
+		$dir = $this->tmpl_dir . DIRECTORY_SEPARATOR . trim($path, '/\\');
 
 		foreach (glob($dir . '/*.css.php') as $file) {
 			$files = include $file;
@@ -304,6 +304,12 @@ __
 			$tmp = tempnam(dirname($file), basename($file));
 
 			foreach ($files as $css) {
+				if (!file_exists($css)) {
+					$css = $dir . DIRECTORY_SEPARATOR . $css;
+				}
+				if (!file_exists($css)) {
+					throw new Exception(sprintf('Could not find file %s', $css));
+				}
 				file_put_contents($tmp, file_get_contents($css) . PHP_EOL . PHP_EOL, FILE_APPEND);
 			}
 
@@ -349,6 +355,12 @@ __
 			$tmp = tempnam(dirname($file), basename($file));
 
 			foreach ($files as $js) {
+				if (!file_exists($js)) {
+					$js = $dir . DIRECTORY_SEPARATOR . $js;
+				}
+				if (!file_exists($js)) {
+					throw new Exception(sprintf('Could not find file %s', $js));
+				}
 				$c = file_get_contents($js);
 				if ($nomap) {
 					$c = preg_replace("~//# sourceMappingURL.+\n~", '', $c);
@@ -365,7 +377,7 @@ __
 		}
 	}
 
-	protected function minifyJS(string $path)
+	protected function minifyJS(string $path): void
 	{
 // 		if (
 // 			is_callable([JavaScriptMinifier::class, 'minify'])
