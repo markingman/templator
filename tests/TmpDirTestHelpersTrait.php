@@ -4,7 +4,7 @@ trait TmpDirTestHelpersTrait
 {
 	protected static $tmpdir;
 
-	protected static function tmpdir_make($dir_name)
+	protected static function tmpdir_make($dir_name): bool
 	{
 		static::$tmpdir = rtrim(sys_get_temp_dir(), '/') . '/' . $dir_name;
 
@@ -19,7 +19,7 @@ trait TmpDirTestHelpersTrait
 		return file_exists(static::$tmpdir);
 	}
 
-	protected static function tmpdir_remove($tmpdir = null)
+	protected static function tmpdir_remove($tmpdir = null): void
 	{
 		$tmpdir = is_null($tmpdir) ? static::$tmpdir : $tmpdir;
 		$iterator = new RecursiveIteratorIterator(

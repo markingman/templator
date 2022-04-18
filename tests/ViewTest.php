@@ -48,33 +48,33 @@ __
 		$this->View = new View(static::$tmpdir);
 	}
 
-	public function testCreate()
+	public function testCreate(): void
 	{
 		$this->assertInstanceOf(ViewInterface::class, $this->View);
 	}
 
-	public function testGetMissing()
+	public function testGetMissing(): void
 	{
 		$view = '--missing--';
 		$res = $this->View->get($view);
 		$this->assertTrue($res === '');
 	}
 
-	public function testGetTemplateString()
+	public function testGetTemplateString(): void
 	{
 		$view = 'string.php';
 		$res = $this->View->get($view);
 		$this->assertTrue($res === 'Hello World');
 	}
 
-	public function testGetTemplateData()
+	public function testGetTemplateData(): void
 	{
 		$view = 'array.php';
 		$res = $this->View->get($view);
 		$this->assertTrue($res === ['a' => 1, 'b' => 2]);
 	}
 
-	public function testTemplateVars()
+	public function testTemplateVars(): void
 	{
 		$view = 'vars1.php';
 		$res = $this->View->get($view, ['var' => true]);

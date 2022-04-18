@@ -11,12 +11,12 @@ class View implements ViewInterface
 		$this->path = realpath($path) . '/';
 	}
 
-	public function find(string $view)
+	public function find(string $view): string|false
 	{
 		return realpath($this->path . $view);
 	}
 
-	public function get(string $view, array $_VARS = null, $assume_ob = true)
+	public function get(string $view, array $_VARS = null, $assume_ob = true): mixed
 	{
 		if (($_TEMPLATE = $this->find($view)) === false) {
 			return '';

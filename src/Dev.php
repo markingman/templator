@@ -25,7 +25,7 @@ class Dev
 		return $this;
 	}
 
-	public function makeDevServer()
+	public function makeDevServer(): void
 	{
 		$here = __DIR__;
 		$http_dir = $this->http_dir . DIRECTORY_SEPARATOR;
@@ -103,7 +103,7 @@ __
 		}
 	}
 
-	public function makeExample()
+	public function makeExample(): void
 	{
 		try {
 			if (!file_exists($this->http_dir . '/.htaccess')) {
@@ -237,7 +237,7 @@ __
 		}
 	}
 
-	public function makeDevExample()
+	public function makeDevExample(): void
 	{
 		foreach (['dev', 'dev/pages', 'dev/data', 'dev/assets'] as $d) {
 			if (!is_dir($this->tmpl_dir . DIRECTORY_SEPARATOR . $d)) {
@@ -294,7 +294,7 @@ __
 		}
 	}
 
-	public function makeCSS(string $path = 'css', bool $min = false)
+	public function makeCSS(string $path = 'css', bool $min = false): void
 	{
 		$dir = $this->tmpl_dir . DIRECTORY_SEPARATOR . trim($path, '/\\');
 
@@ -338,7 +338,7 @@ __
 		}
 	}
 
-	public function makeJS(string $path = 'css', bool $min = false, bool $nomap = false)
+	public function makeJS(string $path = 'js', bool $min = false, bool $nomap = false): void
 	{
 		$dir = rtrim($this->tmpl_dir . trim($path, '/'), '/');
 

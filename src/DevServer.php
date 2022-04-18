@@ -16,12 +16,12 @@ class DevServer
 		$this->routes = $routes ?: [];
 	}
 
-	public function setPath404(string $path)
+	public function setPath404(string $path): void
 	{
 		$this->path404 = $path;
 	}
 
-	public function request(string $path, ViewInterface $View)
+	public function request(string $path, ViewInterface $View): void
 	{
 		if (!$this->routes) {
 			http_response_code(500);
