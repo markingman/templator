@@ -4,7 +4,7 @@ namespace Templator;
 
 class View implements ViewInterface
 {
-	protected $path;
+	protected string $path;
 
 	public function __construct(string $path)
 	{

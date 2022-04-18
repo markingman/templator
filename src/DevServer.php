@@ -8,7 +8,9 @@ use View;
 
 class DevServer
 {
-	protected $dir, $routes, $path404;
+	protected string $dir;
+	protected array $routes;
+	protected string $path404;
 
 	public function __construct(string $dir, array $routes = null)
 	{

@@ -8,19 +8,22 @@ use JShrink\Minifier as JavaScriptMinifier;
 
 class Dev
 {
-	protected $tmpl_dir;
-	protected $http_dir;
+	protected string $tmpl_dir;
+	protected string $http_dir;
 
 	public function __construct(string $tmpl_dir, string $http_dir)
 	{
-		$this->http_dir = realpath($http_dir);
-		$this->tmpl_dir = realpath($tmpl_dir);
+		$http_dir = realpath($http_dir);
+		$tmpl_dir = realpath($tmpl_dir);
 
 		foreach (['tmpl_dir', 'http_dir'] as $d) {
-			if (!is_dir($this->$d) or !is_readable($this->$d)) {
+			if ($$d === false or !is_dir($$d) or !is_readable($$d)) {
 				throw new Exception(sprintf('Could not read %s', $d) . $e->getMessage());
 			}
 		}
+
+		$this->http_dir = $http_dir;
+		$this->tmpl_dir = $tmpl_dir;
 
 		return $this;
 	}
