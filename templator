@@ -58,6 +58,7 @@ Required options:
 
 Command options:
   --min              Minify output (only for --make-css and --make-js)
+  --path             URL path (only for --make-css and --make-js)
 
 Miscellaneous options:
 
