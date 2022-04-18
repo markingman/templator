@@ -23,7 +23,7 @@ trait TmpDirTestHelpersTrait
 	{
 		$tmpdir = is_null($tmpdir) ? static::$tmpdir : $tmpdir;
 		$iterator = new RecursiveIteratorIterator(
-			new RecursiveDirectoryIterator($tmpdir, \FilesystemIterator::SKIP_DOTS),
+			new RecursiveDirectoryIterator($tmpdir, FilesystemIterator::SKIP_DOTS),
 			RecursiveIteratorIterator::CHILD_FIRST
 		);
 

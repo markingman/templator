@@ -6,7 +6,7 @@ use PHPUnit\Framework\TestCase;
 
 class ViewTest extends TestCase
 {
-	use \TmpDirTestHelpersTrait;
+	use TmpDirTestHelpersTrait;
 
 	protected $View;
 
