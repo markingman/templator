@@ -4,19 +4,19 @@ namespace Templator;
 
 class View implements ViewInterface
 {
-	protected $path;
+	protected string $path;
 
 	public function __construct(string $path)
 	{
 		$this->path = realpath($path) . '/';
 	}
 
-	public function find(string $view)
+	public function find(string $view): string|false
 	{
 		return realpath($this->path . $view);
 	}
 
-	public function get(string $view, array $_VARS = null, $assume_ob = true)
+	public function get(string $view, array $_VARS = null, $assume_ob = true): mixed
 	{
 		if (($_TEMPLATE = $this->find($view)) === false) {
 			return '';

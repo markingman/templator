@@ -8,7 +8,9 @@ use View;
 
 class DevServer
 {
-	protected $dir, $routes, $path404;
+	protected string $dir;
+	protected array $routes;
+	protected string $path404;
 
 	public function __construct(string $dir, array $routes = null)
 	{
@@ -16,12 +18,12 @@ class DevServer
 		$this->routes = $routes ?: [];
 	}
 
-	public function setPath404(string $path)
+	public function setPath404(string $path): void
 	{
 		$this->path404 = $path;
 	}
 
-	public function request(string $path, ViewInterface $View)
+	public function request(string $path, ViewInterface $View): void
 	{
 		if (!$this->routes) {
 			http_response_code(500);

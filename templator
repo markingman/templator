@@ -58,6 +58,7 @@ Required options:
 
 Command options:
   --min              Minify output (only for --make-css and --make-js)
+  --path             URL path (only for --make-css and --make-js)
 
 Miscellaneous options:
 
@@ -100,7 +101,7 @@ switch ((string)@$opts['cmd']) {
 		$Dev->makeDevServer();
 		break;
 	case 'make-dev-example':
-		$Dev->makeExample();
+		$Dev->makeDevExample();
 		break;
 	case 'make-example':
 		$Dev->makeExample();

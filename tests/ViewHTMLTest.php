@@ -13,30 +13,30 @@ class ViewHTMLTest extends TestCase
 		$this->ViewHTML = new ViewHTML('');
 	}
 
-	public function testCreate()
+	public function testCreate(): void
 	{
 		$this->assertInstanceOf(ViewHTMLInterface::class, $this->ViewHTML);
 	}
 
-	public function testHtmlEntities()
+	public function testHtmlEntities(): void
 	{
 		$res = $this->ViewHTML->htmlentities('"&foo');
 		$this->assertTrue($res === '&quot;&amp;foo');
 	}
 
-	public function testHtmlSpecialChars()
+	public function testHtmlSpecialChars(): void
 	{
 		$res = $this->ViewHTML->htmlspecialchars('"&foo');
 		$this->assertTrue($res === '"&amp;foo');
 	}
 
-	public function testHtmlAtts()
+	public function testHtmlAtts(): void
 	{
 		$res = $this->ViewHTML->htmlatts(['foo' => 'bar', 'bool' => true, 'esc' => '"']);
 		$this->assertTrue($res === 'foo="bar" bool esc="&quot;"');
 	}
 
-	public function testTag()
+	public function testTag(): void
 	{
 		$res = $this->ViewHTML->tag('br/');
 		$this->assertTrue($res === '<br />');

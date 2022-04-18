@@ -8,28 +8,31 @@ use JShrink\Minifier as JavaScriptMinifier;
 
 class Dev
 {
-	protected $tmpl_dir;
-	protected $http_dir;
+	protected string $tmpl_dir;
+	protected string $http_dir;
 
 	public function __construct(string $tmpl_dir, string $http_dir)
 	{
-		$this->tmpl_dir = rtrim($tmpl_dir, DIRECTORY_SEPARATOR);
-		$this->http_dir = rtrim($http_dir, DIRECTORY_SEPARATOR);
+		$http_dir = realpath($http_dir);
+		$tmpl_dir = realpath($tmpl_dir);
 
 		foreach (['tmpl_dir', 'http_dir'] as $d) {
-			if (!is_dir($this->$d) or !is_readable($this->$d)) {
+			if ($$d === false or !is_dir($$d) or !is_readable($$d)) {
 				throw new Exception(sprintf('Could not read %s', $d) . $e->getMessage());
 			}
 		}
 
+		$this->http_dir = $http_dir;
+		$this->tmpl_dir = $tmpl_dir;
+
 		return $this;
 	}
 
-	public function makeDevServer()
+	public function makeDevServer(): void
 	{
 		$here = __DIR__;
-		$http_dir = realpath($this->http_dir) . DIRECTORY_SEPARATOR;
-		$tmpl_dir = realpath($this->tmpl_dir) . DIRECTORY_SEPARATOR;
+		$http_dir = $this->http_dir . DIRECTORY_SEPARATOR;
+		$tmpl_dir = $this->tmpl_dir . DIRECTORY_SEPARATOR;
 		if (strpos($here, $http_dir) === 0) {
 			$here = substr($here, strlen($http_dir));
 		}
@@ -103,7 +106,7 @@ __
 		}
 	}
 
-	public function makeExample()
+	public function makeExample(): void
 	{
 		try {
 			if (!file_exists($this->http_dir . '/.htaccess')) {
@@ -183,8 +186,8 @@ __
 
 		foreach (['js', 'css', 'img'] as $d) {
 			try {
-				if (!is_dir($this->tmpl_dir . '/' . $d)) {
-					mkdir($this->tmpl_dir . '/' . $d);
+				if (!is_dir($this->tmpl_dir . DIRECTORY_SEPARATOR . $d)) {
+					mkdir($this->tmpl_dir . DIRECTORY_SEPARATOR . $d);
 				}
 			} catch (Exception $e) {
 				throw new Exception(sprintf('Could not create %s directory' . $e->getMessage(), $d));
@@ -237,11 +240,11 @@ __
 		}
 	}
 
-	public function makeDevExample()
+	public function makeDevExample(): void
 	{
 		foreach (['dev', 'dev/pages', 'dev/data', 'dev/assets'] as $d) {
-			if (!is_dir($this->tmpl_dir . '/' . $d)) {
-				mkdir($this->tmpl_dir . '/' . $d);
+			if (!is_dir($this->tmpl_dir . DIRECTORY_SEPARATOR . $d)) {
+				mkdir($this->tmpl_dir . DIRECTORY_SEPARATOR . $d);
 			}
 		}
 
@@ -278,13 +281,13 @@ __
 <?php
 
 // Get test data like this:
-// \$data = \$View->get_view(dev/data/test.php);
+// \$data = \$View->get(dev/data/test.php);
 
 // Call a view template like this:
-// \$content = \$View->get_view(example.php, \$data);
+// \$content = \$View->get(example.php, \$data);
 
 // Combine templates like this:
-// echo \$View->get_view(template.php, 'content' => content.php);
+// echo \$View->get(template.php, ['content' => $content]);
 
 // See tmpl.valhalla.software for more examples.
 
@@ -294,9 +297,9 @@ __
 		}
 	}
 
-	public function makeCSS(string $path = 'css', bool $min = false)
+	public function makeCSS(string $path = 'css', bool $min = false): void
 	{
-		$dir = rtrim($this->tmpl_dir . trim($path, '/'), '/');
+		$dir = $this->tmpl_dir . DIRECTORY_SEPARATOR . trim($path, '/\\');
 
 		foreach (glob($dir . '/*.css.php') as $file) {
 			$files = include $file;
@@ -304,6 +307,12 @@ __
 			$tmp = tempnam(dirname($file), basename($file));
 
 			foreach ($files as $css) {
+				if (!file_exists($css)) {
+					$css = $dir . DIRECTORY_SEPARATOR . $css;
+				}
+				if (!file_exists($css)) {
+					throw new Exception(sprintf('Could not find file %s', $css));
+				}
 				file_put_contents($tmp, file_get_contents($css) . PHP_EOL . PHP_EOL, FILE_APPEND);
 			}
 
@@ -332,16 +341,9 @@ __
 		}
 	}
 
-	public function makeJS(string $path = 'css', bool $min = false, bool $nomap = false)
+	public function makeJS(string $path = 'js', bool $min = false, bool $nomap = false): void
 	{
 		$dir = rtrim($this->tmpl_dir . trim($path, '/'), '/');
-// 		$opts = getopt('', ['min::', 'nomap::']);
-// 
-// 		$dir = realpath(__DIR__ . '/../js');
-// 		$vendor = __DIR__ . '/../vendor';
-// 
-// 		$nomap = isset($opts['nomap']);//Remove sourceMappingURL declaration
-// 		$min = isset($opts['min']);
 
 		foreach (glob($dir . '/*.js.php') as $file) {
 			$files = include $file;
@@ -349,6 +351,12 @@ __
 			$tmp = tempnam(dirname($file), basename($file));
 
 			foreach ($files as $js) {
+				if (!file_exists($js)) {
+					$js = $dir . DIRECTORY_SEPARATOR . $js;
+				}
+				if (!file_exists($js)) {
+					throw new Exception(sprintf('Could not find file %s', $js));
+				}
 				$c = file_get_contents($js);
 				if ($nomap) {
 					$c = preg_replace("~//# sourceMappingURL.+\n~", '', $c);
@@ -365,7 +373,7 @@ __
 		}
 	}
 
-	protected function minifyJS(string $path)
+	protected function minifyJS(string $path): void
 	{
 // 		if (
 // 			is_callable([JavaScriptMinifier::class, 'minify'])
