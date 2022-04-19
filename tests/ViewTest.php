@@ -17,7 +17,17 @@ class ViewTest extends TestCase
 		file_put_contents(static::$tmpdir . '/string.php', <<<__
 <?php
 
-return 'Hello World';
+echo 'Hello World';
+
+__
+		);
+
+		file_put_contents(static::$tmpdir . '/stringphptags.php', <<<__
+<?php
+
+?>AA<?php
+echo 'Hello World';
+?>BB<?php
 
 __
 		);
@@ -57,6 +67,25 @@ return 1;
 
 __
 		);
+
+		file_put_contents(static::$tmpdir . '/nested1.php', <<<__
+<?php
+
+echo 'nested1';
+echo \$this->get('nested2.php', ['var' => 'VAR']);
+echo 'END';
+
+__
+		);
+
+		file_put_contents(static::$tmpdir . '/nested2.php', <<<__
+<?php
+
+echo '2';
+if (\$var === 'VAR') echo 'OK';
+
+__
+		);
 	}
 
 	public function setUp(): void
@@ -81,6 +110,13 @@ __
 		$view = 'string.php';
 		$res = $this->View->get($view);
 		$this->assertTrue($res === 'Hello World');
+	}
+
+	public function testGetTemplateStringPHPTags(): void
+	{
+		$view = 'stringphptags.php';
+		$res = $this->View->get($view);
+		$this->assertTrue($res === 'AAHello WorldBB');
 	}
 
 	public function testGetTemplateData(): void
@@ -113,6 +149,13 @@ __
 		// assume ob doesn't work if result might be === 1
 		$res = $this->View->get($view, null, true);
 		$this->assertTrue($res === '');
+	}
+
+	public function testGetTemplateNested(): void
+	{
+		$view = 'nested1.php';
+		$res = $this->View->get($view);
+		$this->assertTrue($res === 'nested1' . '2' . 'OK' . 'END');
 	}
 
 	public static function tearDownAfterClass(): void
