@@ -174,7 +174,7 @@ __
         "vendor-dir": "vendor"
     },
     "require": {
-        "php": ">=7"
+        "php": ">=8"
     }
 }
 __
