@@ -69,7 +69,8 @@ class ViewHTML extends View implements ViewHTMLInterface
 	{
 		// e.g:
 		// tag('img/', ['src' => 'a.jpg']) 
-		// tag('p', null, 'Hello, <b>world</b>')
+		// tag('a', ['href' => $var, 'class' => 'btn', 'onclick' => 'fc()']);
+		// tag('p/', null, 'Hello, <b>world</b>')
 		// tag('/div')
 
 		if ($close = strpos($tag, '/')) {
@@ -81,9 +82,14 @@ class ViewHTML extends View implements ViewHTMLInterface
 		}
 		if ($html) {
 			$s .= '>' . $html;
+			if ($close) {
+				$s .= '</' . $tag . '>';
+			}
+
+			return $s;
 		}
 		if ($close) {
-			$s .= $html ? '</' . $tag : ' /';
+			$s .= ' /';
 		}
 		$s .= '>';
 
