@@ -109,9 +109,9 @@ __
 	public function makeExample(): void
 	{
 		try {
-			if (!file_exists($this->http_dir . '/.htaccess')) {
+			if (!file_exists($this->tmpl_dir . '/.htaccess')) {
 				file_put_contents(
-					$this->http_dir . '/.htaccess',
+					$this->tmpl_dir . '/.htaccess',
 					<<<__
 Options -Indexes
 
@@ -135,9 +135,9 @@ __
 		}
 
 		try {
-			if (!file_exists($this->http_dir . '/.gitignore')) {
+			if (!file_exists($this->tmpl_dir . '/.gitignore')) {
 				file_put_contents(
-					$this->http_dir . '/.gitignore',
+					$this->tmpl_dir . '/.gitignore',
 					<<<__
 .DS_Store
 /tmp
@@ -149,9 +149,9 @@ __
 		}
 
 		try {
-			if (!file_exists($this->http_dir . '/README.md')) {
+			if (!file_exists($this->tmpl_dir . '/README.md')) {
 				file_put_contents(
-					$this->http_dir . '/README.md',
+					$this->tmpl_dir . '/README.md',
 					<<<__
 # Templates Project
 
@@ -164,9 +164,9 @@ __
 		}
 
 		try {
-			if (!file_exists($this->http_dir . '/composer.json')) {
+			if (!file_exists($this->tmpl_dir . '/composer.json')) {
 				file_put_contents(
-					$this->http_dir . '/composer.json',
+					$this->tmpl_dir . '/composer.json',
 					<<<__
 {
 	"name": "Templates Project",
