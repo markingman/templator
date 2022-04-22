@@ -343,7 +343,7 @@ __
 
 	public function makeJS(string $path = 'js', bool $min = false, bool $nomap = false): void
 	{
-		$dir = rtrim($this->tmpl_dir . trim($path, '/'), '/');
+		$dir = $this->tmpl_dir . DIRECTORY_SEPARATOR . trim($path, '/\\');
 
 		foreach (glob($dir . '/*.js.php') as $file) {
 			$files = include $file;
