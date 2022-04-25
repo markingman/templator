@@ -3,7 +3,7 @@
 
 use Templator\Dev;
 
-if (strpos(php_sapi_name(), 'cli') === false) {
+if (strpos(PHP_SAPI, 'cli') === false) {
 	fwrite(STDERR, 'Requires CLI PHP' . PHP_EOL);
 
 	exit(1);
@@ -81,6 +81,8 @@ if (@$opts['v'] === false or @$opts['version'] === false) {
 }
 
 foreach (['tmpl-dir', 'http-dir'] as $v) {
+	//if not sent use assumtions
+		// fwrite warning
 	if (!@$opts[$v] or !strlen($opts[$v]) or !is_dir($opts[$v]) or !is_readable($opts[$v])) {
 		fwrite(
 			STDERR,
