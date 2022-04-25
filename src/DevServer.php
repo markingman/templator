@@ -10,7 +10,7 @@ class DevServer
 {
 	protected string $dir;
 	protected array $routes;
-	protected string $path404;
+	protected ?string $path404 = null;
 
 	public function __construct(string $dir, array $routes = null)
 	{
