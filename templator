@@ -20,7 +20,7 @@ define('VERSION', '1.0');
 if (!include 'src/Dev.php') {
 	fwrite(
 		STDERR,
-		'ERROR: Could not find Admin.php' . PHP_EOL
+		'ERROR: Could not find Templator\\Dev' . PHP_EOL
 	);
 
 	exit(1);
