@@ -3,17 +3,12 @@
 	"config": {
         "vendor-dir": "vendor"
     },
+    "autoload": {
+        "psr-4": {
+            "PHPCanvas\\": "src/classes/PHPCanvas"
+        }
+    },
     "require": {
         "php": ">=8.1"
-    },
-    "require-dev": {
-		"tedivm/jshrink": "~1.0",
-		"phpunit/phpunit": "9.5.20"
-	},
-    "autoload-dev": {
-        "psr-4": {
-            "Templator\\": "src/"
-        },
-	    "files": ["src/function.vx.php"]
     }
 }
