@@ -18,10 +18,7 @@ if (version_compare('8.1.0', PHP_VERSION, '>')) {
 define('VERSION', '1.2.0');
 
 if (!include 'src/Dev.php') {
-	fwrite(
-		STDERR,
-		'ERROR: Could not find Templator\\Dev' . PHP_EOL
-	);
+	fwrite(STDERR, 'Could not find Templator\\Dev' . PHP_EOL);
 
 	exit(1);
 }
@@ -34,6 +31,12 @@ $opts = getopt('hv', [
 	'min::',
 	'cmd:'
 ]);
+
+if (empty($opts)) {
+	fwrite(STDERR, 'No options set, see --help' . PHP_EOL);
+
+	exit(1);
+}
 
 if (@$opts['h'] === false or @$opts['help'] === false) {
 	fwrite(
@@ -86,7 +89,7 @@ foreach (['tmpl-dir', 'http-dir'] as $v) {
 	if (!@$opts[$v] or !strlen($opts[$v]) or !is_dir($opts[$v]) or !is_readable($opts[$v])) {
 		fwrite(
 			STDERR,
-			sprintf('ERROR: Could not get directory from argument --%s', $v) . PHP_EOL
+			sprintf('Could not get directory from argument --%s', $v) . PHP_EOL
 		);
 
 		exit(1);
@@ -117,7 +120,7 @@ switch ((string)@$opts['cmd']) {
 	default:
 		fwrite(
 			STDERR,
-			'ERROR: Unknown command (see --help for list of commands)' . PHP_EOL
+			'Unknown command (see --help for list of commands)' . PHP_EOL
 		);
 
 		exit(1);
