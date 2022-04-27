@@ -1,14 +1,25 @@
 {
 	"name": "markingman/templator",
-	"config": {
-        "vendor-dir": "vendor"
-    },
-    "autoload": {
-        "psr-4": {
-            "Templator\\": "src"
-        }
-    },
+    "description": "Simple PHP server-side template system.",
+    "type": "library",
     "require": {
         "php": ">=8.1"
+    },
+    "require-dev": {
+		"tedivm/jshrink": "~1.0",
+		"phpunit/phpunit": "9.5.20"
+	},
+    "bin": [
+    	"templator"
+    ],
+    "autoload": {
+        "psr-4": {
+            "Templator\\": "src/"
+        }
+    },
+    "autoload-dev": {
+	    "files": [
+	    	"src/function.vx.php"
+	    ]
     }
 }
