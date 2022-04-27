@@ -101,6 +101,12 @@ $min = isset($opts['min']);
 
 $Dev = new Dev($opts['tmpl-dir'], $opts['http-dir']);
 
+if (@$opts['cmd'] === 'make-js' and $min) {
+	if (file_exists(__DIR__ . '/vendor/autoload.php')) {
+		require __DIR__ . '/vendor/autoload.php';
+	}
+}
+
 switch ((string)@$opts['cmd']) {
 	case 'make-server':
 		$Dev->makeDevServer();

@@ -375,13 +375,17 @@ __
 
 	protected function minifyJS(string $path): void
 	{
-// 		if (
-// 			is_callable([JavaScriptMinifier::class, 'minify'])
-// 			or 
-// 		) {
-
-		if (@include $vendor . '/tedivm/jshrink/src/JShrink/Minifier.php') {
-			file_put_contents($tmp, JShrink\Minifier::minify(file_get_contents($tmp), ['flaggedComments' => false]));
+		if (!class_exists(JavaScriptMinifier::class)) {
+			throw new Exception(sprintf('Could not find %s', JavaScriptMinifier::class));
+		} else {
+			try {
+				file_put_contents(
+					$path, 
+					JavaScriptMinifier::minify(file_get_contents($path), ['flaggedComments' => false])
+				);
+			} catch (Exception $e) {
+				throw new Exception('Could not minify JS file; ' . $e->getMessage());
+			}
 		}
 	}
 }
