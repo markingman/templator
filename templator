@@ -53,7 +53,7 @@ Required options:
   --cmd <command>    Command to execute (see below)
 
 <command> options:
-  "make-server" 	 Create .htaccess and index.php files
+  "make-server"      Create .htaccess and index.php files
   "make-example"     Create sample template files
   "make-dev-example" Create starter dev framework
   "make-css"         Build the CSS files
