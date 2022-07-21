@@ -373,6 +373,36 @@ __
 		}
 	}
 
+	public function watchJS(string $path = 'js')
+	{
+		$dir = $this->tmpl_dir . DIRECTORY_SEPARATOR . trim($path, '/\\');
+
+		echo sprintf('Watching %s:', $dir), PHP_EOL;
+
+		$t = time();
+		while(true) {
+			$it = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($dir));
+			$it->rewind();
+			$mod = [];
+			while($it->valid()) {
+				if (!$it->isDot()) {
+					$m = $it->getMTime();
+					if ($m > $t) {
+						$mod[] = $it->getFilename();
+					}
+				}
+				$it->next();
+			}
+			if ($mod) {
+				echo 'Changed files:', PHP_EOL;
+				echo implode(PHP_EOL, $mod), PHP_EOL;
+				$this->makeJS($path);
+				$t = time();
+			}
+			sleep(1);
+		}
+	}
+
 	protected function minifyJS(string $path): void
 	{
 		if (!class_exists(JavaScriptMinifier::class)) {

@@ -47,26 +47,25 @@ Templator v%s
 Usage: templator [options]
 
 Required options:
-
-  --tmpl-dir <path>  File path to templates directory
-  --http-dir <path>  File path to HTTP directory
-  --cmd <command>    Command to execute (see below)
+  --tmpl-dir <path>   File path to templates directory
+  --http-dir <path>   File path to HTTP directory
+  --cmd <command>     Command to execute (see below)
 
 <command> options:
-  "make-server"      Create .htaccess and index.php files
-  "make-example"     Create sample template files
-  "make-dev-example" Create starter dev framework
-  "make-css"         Build the CSS files
-  "make-js"          Build the JS files
+  "make-server"       Create .htaccess and index.php files
+  "make-example"      Create sample template files
+  "make-dev-example"  Create starter dev framework
+  "make-css ...<arg>" Build the CSS files
+  "make-js ...<arg>"  Build the JS files
+  "watch-js ...<arg>" Watch the JS files and build if changed
 
-Command options:
-  --min              Minify output (only for --make-css and --make-js)
-  --path             URL path (only for --make-css and --make-js)
+<arg> options:
+  --min               Minify output
+  --path              URL path
 
 Miscellaneous options:
-
-  -h|--help          Prints this usage information
-  --version          Prints the version and exits
+  -h|--help           Prints this usage information
+  --version           Prints the version and exits
 __
 			, VERSION) . PHP_EOL . PHP_EOL
 	);
@@ -122,6 +121,9 @@ switch ((string)@$opts['cmd']) {
 		break;
 	case 'make-js':
 		$Dev->makeJS($path ?: 'js', $min);
+		break;
+	case 'watch-js':
+		$Dev->watchJS($path ?: 'js');
 		break;
 	default:
 		fwrite(
