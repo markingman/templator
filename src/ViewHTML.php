@@ -32,7 +32,7 @@ class ViewHTML extends View implements ViewHTMLInterface
 				$o . '$1' . $c, $s
 			);
 		} elseif ($strip) {
-			strip_tags($s);
+			$s = strip_tags($s);
 		}
 
 		$s = htmlspecialchars($s, ENT_NOQUOTES | ENT_HTML5, null, false);
