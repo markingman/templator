@@ -82,7 +82,7 @@ __
 <?php
 
 echo '2';
-if (\$var === 'VAR') echo 'OK';
+if (\$var === 'VAR') {echo 'OK';}
 
 __
 		);
@@ -139,7 +139,7 @@ __
 		$res = $this->View->get($view, null, false);
 		$this->assertTrue($res === 10);
 
-		$res = $this->View->get($view, null, true);
+		$res = $this->View->get($view);
 		$this->assertTrue($res === 10);
 
 		$view = 'vars2.1.php';
@@ -147,7 +147,7 @@ __
 		$this->assertTrue($res === 1);
 
 		// assume ob doesn't work if result might be === 1
-		$res = $this->View->get($view, null, true);
+		$res = $this->View->get($view);
 		$this->assertTrue($res === '');
 	}
 
