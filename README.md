@@ -18,10 +18,6 @@ Run `make setup` to get Composer dependencies.
 
 Run `make start` to create a Docker container (with current PHP version).
 
-Run `make ssh` to access container.
+Run `make tests` to run tests in Docker container.
 
-Inside container run `vendor/phpunit/phpunit/phpunit tests` (see details in `./phpunit.xml`).
-
-Exit container with `exit` command.
-
-Run `makde stop` to stop Docker container.
+Run `make stop` to stop Docker container.
