@@ -123,39 +123,39 @@ __
 	{
 		$view = 'array.php';
 		$res = $this->View->get($view);
-		$this->assertTrue($res === ['a' => 1, 'b' => 2]);
+		$this->assertEquals($res, ['a' => 1, 'b' => 2]);
 	}
 
 	public function testTemplateVars(): void
 	{
 		$view = 'vars1.php';
 		$res = $this->View->get($view, ['var' => true]);
-		$this->assertTrue($res === 'TRUE');
+		$this->assertEquals($res, 'TRUE');
 	}
 
 	public function testTemplateVarsOb(): void
 	{
 		$view = 'vars2.php';
 		$res = $this->View->get($view, null, false);
-		$this->assertTrue($res === 10);
+		$this->assertEquals($res, 10);
 
 		$res = $this->View->get($view);
-		$this->assertTrue($res === 10);
+		$this->assertEquals($res, 10);
 
 		$view = 'vars2.1.php';
 		$res = $this->View->get($view, null, false);
-		$this->assertTrue($res === 1);
+		$this->assertEquals($res, 1);
 
 		// assume ob doesn't work if result might be === 1
 		$res = $this->View->get($view);
-		$this->assertTrue($res === '');
+		$this->assertEquals($res, '');
 	}
 
 	public function testGetTemplateNested(): void
 	{
 		$view = 'nested1.php';
 		$res = $this->View->get($view);
-		$this->assertTrue($res === 'nested1' . '2' . 'OK' . 'END');
+		$this->assertEquals($res, 'nested1' . '2' . 'OK' . 'END');
 	}
 
 	public static function tearDownAfterClass(): void
