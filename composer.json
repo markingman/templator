@@ -9,7 +9,6 @@
         "vendor-dir": "vendor"
     },
     "require-dev": {
-		"tedivm/jshrink": "~1.0",
 		"phpunit/phpunit": "9.5.20"
 	},
     "autoload": {
