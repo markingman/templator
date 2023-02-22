@@ -16,6 +16,9 @@ start: ## Start up Docker container to run tests
 stop: ## Stop current containers
 	@docker stop templator-test
 
+test: ## Run tests in Docker container
+	@docker exec -it templator-test vendor/phpunit/phpunit/phpunit
+
 ssh: ## SSH to Docker container
 	@docker exec -it templator-test sh
 
