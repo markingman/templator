@@ -6,6 +6,8 @@ trait TmpDirTestHelpersTrait
 
 	protected static function tmpdir_make($dir_name): bool
 	{
+		$dir_name = str_replace([".", " "], "", microtime()) . '/' . $dir_name;
+
 		static::$tmpdir = rtrim(sys_get_temp_dir(), '/') . '/' . $dir_name;
 
 		if (file_exists(static::$tmpdir)) {
@@ -13,7 +15,7 @@ trait TmpDirTestHelpersTrait
 		}
 
 		if (!file_exists(static::$tmpdir)) {
-			mkdir(static::$tmpdir);
+			mkdir(static::$tmpdir, 0755, true);
 		}
 
 		return file_exists(static::$tmpdir);
