@@ -1,5 +1,7 @@
 .DS_Store
-.idea
-.phpunit*
-*.bbprojectd
+/.idea
+/.phpunit*
+/*.bbprojectd
+/composer.lock
+/composer.phar
 /vendor
