@@ -14,6 +14,10 @@ To use, require in `composer.json`, e.g:
 
 For development `cd` into this directory.
 
+Run `make` for list of options, for example:
+
+Run `make build` to build and start Docker container to run tests.
+
 Run `make setup` to get Composer dependencies.
 
 Run `make start` to create a Docker container (with current PHP version).

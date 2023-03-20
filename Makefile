@@ -9,6 +9,7 @@ help:
 
 build: ## Build and start Docker container to run tests
 	@docker run -d -p 888:80 --platform linux/amd64 --name templator-test -v "$(shell pwd)":/var/www/html php:8.1-apache
+	@docker exec -it templator-test  docker-php-ext-install zip
 
 setup: ## Set up environment in Docker container
 	@docker exec -it templator-test curl https://raw.githubusercontent.com/composer/getcomposer.org/76a7060ccb93902cd7576b67264ad91c8a2700e2/web/installer | php -- --quiet
@@ -20,7 +21,7 @@ install: ## Install composer in Container
 update: ## Update composer in Container
 	@docker exec -it templator-test php composer.phar update
 
-start: ## Start up Docker container to run tests (if container has been built and stopped)
+start: ## Start Docker container to run tests (if container built and stopped)
 	@docker container start templator-test
 
 stop: ## Stop current container (if running)
