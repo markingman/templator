@@ -1,15 +1,16 @@
 # Makefile for local development
 
 .DEFAULT_GOAL := help
-
 .PHONY: help
 
 help:
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ": ## "}; {printf "\033[36m%-28s\033[0m %s\n", $$1, $$2}' | sed 's/Makefile://g'
 
-build: ## Build and start Docker container to run tests
-	@docker run -d -p 888:80 --platform linux/amd64 --name templator-test -v "$(shell pwd)":/var/www/html php:8.1-apache
-	@docker exec -it templator-test  docker-php-ext-install zip
+build: ## Build a Docker image for local development
+	@docker build -t templator-test .
+
+run: ## Run the Docker image
+	@docker run -d -v `pwd`:/var/www/html --name templator-test templator-test
 
 setup: ## Set up environment in Docker container
 	@docker exec -it templator-test curl https://raw.githubusercontent.com/composer/getcomposer.org/76a7060ccb93902cd7576b67264ad91c8a2700e2/web/installer | php -- --quiet

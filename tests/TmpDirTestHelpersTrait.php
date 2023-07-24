@@ -2,7 +2,7 @@
 
 trait TmpDirTestHelpersTrait
 {
-	protected static $tmpdir;
+	protected static string $tmpdir;
 
 	protected static function tmpdir_make($dir_name): bool
 	{

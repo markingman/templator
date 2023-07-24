@@ -6,7 +6,7 @@ use PHPUnit\Framework\TestCase;
 
 class ViewHTMLTest extends TestCase
 {
-	protected $ViewHTML;
+	protected ViewHTML $ViewHTML;
 
 	public function setUp(): void
 	{
@@ -21,60 +21,63 @@ class ViewHTMLTest extends TestCase
 	public function testHtmlEntities(): void
 	{
 		$res = $this->ViewHTML->htmlentities('"&foo');
-		$this->assertEquals($res, '&quot;&amp;foo');
+		$this->assertEquals('&quot;&amp;foo', $res);
 	}
 
 	public function testHtmlSpecialChars(): void
 	{
 		$res = $this->ViewHTML->htmlspecialchars('"&foo');
-		$this->assertEquals($res, '"&amp;foo', 'Should encode special chars');
+		$this->assertEquals('"&amp;foo', $res, 'Should encode special chars');
 
 		$res = $this->ViewHTML->htmlspecialchars('<p>foo<i class="zzz">bar</i></p>');
-		$this->assertEquals($res, 'foobar', 'Should strip tags');
+		$this->assertEquals('foobar', $res, 'Should strip tags');
 
 		$res = $this->ViewHTML->htmlspecialchars('<p>foo<i class="zzz">bar</i></p>', ['i']);
-		$this->assertEquals($res, 'foo<i class="zzz">bar</i>', 'Should persist specified tag');
+		$this->assertEquals('foo<i class="zzz">bar</i>', $res, 'Should persist specified tag');
 
 		$res = $this->ViewHTML->htmlspecialchars('<p>foo<i class="zzz"><b>bar</b></i></p>', ['i', 'p']);
-		$this->assertEquals($res, '<p>foo<i class="zzz">bar</i></p>', 'Should persist specified tags');
+		$this->assertEquals('<p>foo<i class="zzz">bar</i></p>', $res, 'Should persist specified tags');
 
 		$res = $this->ViewHTML->htmlspecialchars('<p>foo</p>', null, false);
-		$this->assertEquals($res, '&lt;p&gt;foo&lt;/p&gt;', 'Should encode tags');
+		$this->assertEquals('&lt;p&gt;foo&lt;/p&gt;', $res, 'Should encode tags');
 
 		$res = $this->ViewHTML->htmlspecialchars('<p>foo<b>bar</b></p>', ['p'], false);
-		$this->assertEquals($res, '<p>foo&lt;b&gt;bar&lt;/b&gt;</p>', 'Should encode tags and persist specified tag');
+		$this->assertEquals('<p>foo&lt;b&gt;bar&lt;/b&gt;</p>', $res, 'Should encode tags and persist specified tag');
 	}
 
 	public function testHtmlAtts(): void
 	{
 		$res = $this->ViewHTML->htmlatts(['foo' => 'bar', 'bool' => true, 'esc' => '"']);
-		$this->assertEquals($res, 'foo="bar" bool esc="&quot;"', 'Should create attributes');
+		$this->assertEquals('foo="bar" bool esc="&quot;"', $res, 'Should create attributes');
 
 		$res = $this->ViewHTML->htmlatts(['foo' => 'bar', 'bool' => true, 'esc' => '"'], ['bool', 'esc']);
-		$this->assertEquals($res, 'foo="bar"', 'Should create filtered attributes');
+		$this->assertEquals('foo="bar"', $res, 'Should create filtered attributes');
 	}
 
 	public function testTag(): void
 	{
 		$res = $this->ViewHTML->tag('br/');
-		$this->assertEquals($res, '<br />', 'Should make closed tag');
+		$this->assertEquals('<br />', $res, 'Should make closed tag');
 
 		$res = $this->ViewHTML->tag('hr');
-		$this->assertEquals($res, '<hr>', 'Should make plain tag');
+		$this->assertEquals('<hr>', $res, 'Should make plain tag');
 
 		$res = $this->ViewHTML->tag('/p');
-		$this->assertEquals($res, '</p>', 'Should make close tag');
+		$this->assertEquals('</p>', $res, 'Should make close tag');
 
 		$res = $this->ViewHTML->tag('tag/', ['foo' => 'bar', 'bool' => true, 'esc' => '"']);
-		$this->assertEquals($res, '<tag foo="bar" bool esc="&quot;" />', 'Should make closed tag with attributes');
+		$this->assertEquals('<tag foo="bar" bool esc="&quot;" />', $res, 'Should make closed tag with attributes');
 
 		$res = $this->ViewHTML->tag('p/', null, 'Hello, <b>world</b>');
-		$this->assertEquals($res, '<p>Hello, <b>world</b></p>', 'Should make closed tag with HTML contents');
+		$this->assertEquals('<p>Hello, <b>world</b></p>', $res, 'Should make closed tag with HTML contents');
 
-		$res = $this->ViewHTML->tag('div/', ['foo' => 'bar', 'bool' => true, 'esc' => '"'], '<p><a>test</a></p>');
-		$this->assertEquals($res, '<div foo="bar" bool esc="&quot;"><p><a>test</a></p></div>', 'Should make tag with attributes and HTML contents');
+		$res = $this->ViewHTML->tag('div/', ['data-foo' => 'bar', 'data-esc' => '"'], '<p><a>test</a></p>');
+		$this->assertEquals('<div data-foo="bar" data-esc="&quot;"><p><a>test</a></p></div>', $res, 'Should make tag with attributes and HTML contents');
+
+		$res = $this->ViewHTML->tag('input/', ['readonly' => true, 'value' => "VALUE"]);
+		$this->assertEquals('<input readonly value="VALUE" />', $res, 'Should make tag with boolean attributes');
 
 		$res = $this->ViewHTML->tag('tag/', ['foo' => 'bar', 'bool' => true, 'esc' => '"']);
-		$this->assertEquals($res, '<tag foo="bar" bool esc="&quot;" />', 'Should make closed tag with attributes');
+		$this->assertEquals('<tag foo="bar" bool esc="&quot;" />', $res, 'Should make closed tag with attributes');
 	}
 }

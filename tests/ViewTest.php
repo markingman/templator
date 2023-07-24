@@ -8,7 +8,7 @@ class ViewTest extends TestCase
 {
 	use TmpDirTestHelpersTrait;
 
-	protected $View;
+	protected View $View;
 
 	public static function setUpBeforeClass(): void
 	{
@@ -73,7 +73,7 @@ return ['a' => 1, 'b' => 2];
 __
 		);
 		$res = $this->View->get($view);
-		$this->assertEquals($res, ['a' => 1, 'b' => 2]);
+		$this->assertEquals(['a' => 1, 'b' => 2], $res);
 	}
 
 	public function testTemplateVars(): void
@@ -91,7 +91,7 @@ if (@\$var === true) {
 __
 		);
 		$res = $this->View->get($view, ['var' => true]);
-		$this->assertEquals($res, 'TRUE');
+		$this->assertEquals('TRUE', $res);
 	}
 
 	public function testTemplateVarsOb(): void
@@ -105,10 +105,10 @@ return 10;
 __
 		);
 		$res = $this->View->get($view, null, false);
-		$this->assertEquals($res, 10);
+		$this->assertEquals(10, $res);
 
 		$res = $this->View->get($view);
-		$this->assertEquals($res, 10);
+		$this->assertEquals(10, $res);
 
 		$view = 'vars2.1.php';
 		file_put_contents(static::$tmpdir . '/' . $view, <<<__
@@ -119,11 +119,11 @@ return 1;
 __
 		);
 		$res = $this->View->get($view, null, false);
-		$this->assertEquals($res, 1);
+		$this->assertEquals(1, $res);
 
 		// assume ob doesn't work if result might be === 1
 		$res = $this->View->get($view);
-		$this->assertEquals($res, '');
+		$this->assertEquals('', $res);
 	}
 
 	public function testGetTemplateNested(): void

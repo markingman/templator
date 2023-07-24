@@ -11,7 +11,7 @@ class ViewHTML extends View implements ViewHTMLInterface
 
 	public function htmlspecialchars(string $s, array $t = null, bool $strip = true): string
 	{
-		if (strpos($s, '<') === false) {
+		if (!str_contains($s, '<')) {
 			return htmlspecialchars($s, ENT_NOQUOTES | ENT_HTML5, null, false);
 		}
 
@@ -19,7 +19,7 @@ class ViewHTML extends View implements ViewHTMLInterface
 			$o = chr(2);
 			$c = chr(3);
 
-			if ($t and $r = (strpos($s, $o) !== false)) {
+			if (str_contains($s, $o)) {
 				$s = str_replace([$o, $c], '', $s);
 			}
 
@@ -60,9 +60,8 @@ class ViewHTML extends View implements ViewHTMLInterface
 				$ret .= $k . '="' . $this->htmlentities($v) . '" ';
 			}
 		}
-		$ret = substr($ret, 0, -1);
 
-		return $ret;
+		return substr($ret, 0, -1);
 	}
 
 	public function tag(string $tag, array $atts = null, string $html = ''): string
