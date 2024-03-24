@@ -1,6 +1,6 @@
 # templator
 
-Simple PHP server-side template system
+Simple PHP server-side template system.
 
 ## Usage
 

@@ -3,6 +3,7 @@
 /.editorconfig        export-ignore
 /.github              export-ignore
 /composer.lock        export-ignore
+/Dockerfile           export-ignore
 /Makefile             export-ignore
 /phpunit.xml          export-ignore
 /tests                export-ignore
