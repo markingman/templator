@@ -152,6 +152,68 @@ __
 		$this->assertEquals($res, 'nested1' . '2' . 'OK' . 'END');
 	}
 
+	public function testFetch(): void
+	{
+		$tmpl = 'tmpl.php';
+		file_put_contents(static::$tmpdir . '/' . $tmpl, <<<__
+<?php
+
+return function() {};
+
+__
+		);
+
+		$res = $this->View->fetch($tmpl);
+		$this->assertIsCallable($res);
+	}
+
+	public function testFetchAndCall(): void
+	{
+		$tmpl = 'tmpl.php';
+		file_put_contents(static::$tmpdir . '/' . $tmpl, <<<__
+<?php
+
+return function(): string {
+	return 'abc';
+};
+
+__
+		);
+		$res = $this->View->fetch($tmpl)();
+		$this->assertEquals('abc', $res);
+	}
+
+	public function testFetchAndCallWithArgs(): void
+	{
+		$tmpl = 'tmpl.php';
+		file_put_contents(static::$tmpdir . '/' . $tmpl, <<<__
+<?php
+
+return function(bool \$a, string \$b, array \$c): ?array {
+	return (\$a and \$b === 'B' and \$c === [1]) ? [1, 2, 3] : null;
+};
+
+__
+		);
+		$res = $this->View->fetch($tmpl)(true, 'B', [1]);
+		$this->assertEquals([1, 2, 3], $res);
+	}
+
+	public function testFetchOb(): void
+	{
+		$tmpl = 'tmpl.php';
+		file_put_contents(static::$tmpdir . '/' . $tmpl, <<<__
+<?php return function(): string { ob_start(); ?>
+	<h1>A</h1>
+
+<?php return trim(ob_get_clean()); };
+__
+		);
+
+		$res = $this->View->fetch($tmpl)();
+		$this->assertEquals('<h1>A</h1>', $res);
+	}
+
 	public static function tearDownAfterClass(): void
 	{
 		static::tmpdir_remove();
