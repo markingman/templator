@@ -4,15 +4,17 @@ namespace Templator;
 
 class ViewHTML extends View implements ViewHTMLInterface
 {
+	const ENT_HTML = ENT_HTML5;
+
 	public function htmlentities(string $s): string
 	{
-		return htmlentities($s, ENT_QUOTES | ENT_HTML5, null, false);
+		return htmlentities($s, ENT_QUOTES | static::ENT_HTML, null, false);
 	}
 
 	public function htmlspecialchars(string $s, array $t = null, bool $strip = true): string
 	{
 		if (!str_contains($s, '<')) {
-			return htmlspecialchars($s, ENT_NOQUOTES | ENT_HTML5, null, false);
+			return htmlspecialchars($s, ENT_NOQUOTES | static::ENT_HTML, null, false);
 		}
 
 		if ($t) {
