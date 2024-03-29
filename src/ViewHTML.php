@@ -22,7 +22,11 @@ class ViewHTML extends View implements ViewHTMLInterface
 			$c = chr(3);
 
 			if (str_contains($s, $o)) {
-				$s = str_replace([$o, $c], '', $s);
+				$s = str_replace($o, '', $s);
+			}
+
+			if (str_contains($s, $c)) {
+				$s = str_replace($c, '', $s);
 			}
 
 			if ($strip) {
