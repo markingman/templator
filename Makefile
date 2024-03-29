@@ -30,7 +30,7 @@ stop: ## Stop current container (if running)
 	@docker stop $(NAME)
 
 test: ## Run tests in Docker container
-	@docker exec -it $(NAME) vendor/phpunit/phpunit/phpunit
+	@docker exec -it $(NAME) vendor/bin/phpunit
 
 ssh: ## SSH to Docker container
 	@docker exec -it $(NAME) sh

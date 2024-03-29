@@ -1,10 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- E.g: vendor/phpunit/phpunit/phpunit tests -->
-<phpunit bootstrap="tests/bootstrap.php">
-	<testsuites>
-		<testsuite name="Templator Test Suite">
-		  <file>tests/ViewTest.php</file>
-		  <file>tests/ViewHTMLTest.php</file>
-		</testsuite>
-	</testsuites>
+<!-- E.g: vendor/bin/phpunit -->
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" bootstrap="tests/bootstrap.php" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/11.0/phpunit.xsd">
+  <coverage includeUncoveredFiles="true" pathCoverage="false">
+    <report>
+      <html outputDirectory="phpunit-coverage" lowUpperBound="50" highLowerBound="90"/>
+    </report>
+  </coverage>
+  <testsuites>
+    <testsuite name="Templator Test Suite">
+      <file>tests/ViewTest.php</file>
+      <file>tests/ViewHTMLTest.php</file>
+    </testsuite>
+  </testsuites>
+  <source>
+    <include>
+      <directory>src</directory>
+    </include>
+  </source>
 </phpunit>

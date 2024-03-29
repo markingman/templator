@@ -1,8 +1,8 @@
 <?php
 
+use PHPUnit\Framework\TestCase;
 use Templator\View;
 use Templator\ViewInterface;
-use PHPUnit\Framework\TestCase;
 
 class ViewTest extends TestCase
 {
@@ -13,6 +13,11 @@ class ViewTest extends TestCase
 	public static function setUpBeforeClass(): void
 	{
 		static::tmpdir_make(self::class);
+	}
+
+	public static function tearDownAfterClass(): void
+	{
+		static::tmpdir_remove();
 	}
 
 	public function setUp(): void
@@ -214,8 +219,23 @@ __
 		$this->assertEquals('<h1>A</h1>', $res);
 	}
 
-	public static function tearDownAfterClass(): void
+	public function testFetchExceptionNothingFound(): void
 	{
-		static::tmpdir_remove();
+		$this->expectException(Exception::class);
+		$this->expectExceptionMessage("Nothing found at 'MISSING'");
+		$this->View->fetch('MISSING')();
+	}
+
+	public function testFetchExceptionClosureNotFound(): void
+	{
+		$tmpl = 'tmpl.php';
+		file_put_contents(static::$tmpdir . '/' . $tmpl, <<<__
+<?php return true;
+__
+		);
+
+		$this->expectException(Exception::class);
+		$this->expectExceptionMessage("Closure not found at '$tmpl'");
+		$this->View->fetch($tmpl)();
 	}
 }

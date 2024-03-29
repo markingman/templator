@@ -43,6 +43,15 @@ class ViewHTMLTest extends TestCase
 
 		$res = $this->ViewHTML->htmlspecialchars('<p>foo<b>bar</b></p>', ['p'], false);
 		$this->assertEquals('<p>foo&lt;b&gt;bar&lt;/b&gt;</p>', $res, 'Should encode tags and persist specified tag');
+
+		$res = $this->ViewHTML->htmlspecialchars('<p>' . chr(2) . 'foo<b>bar</b></p>', ['p'], false);
+		$this->assertEquals('<p>foo&lt;b&gt;bar&lt;/b&gt;</p>', $res, 'Should encode tags and persist specified tag');
+
+		$res = $this->ViewHTML->htmlspecialchars('<p>' . chr(3) . 'foo<b>bar</b></p>', ['p'], false);
+		$this->assertEquals('<p>foo&lt;b&gt;bar&lt;/b&gt;</p>', $res, 'Should encode tags and persist specified tag');
+
+		$res = $this->ViewHTML->htmlspecialchars('<p>' . chr(3) . 'foo<b>bar</b>' . chr(2) . '</p>', ['p'], false);
+		$this->assertEquals('<p>foo&lt;b&gt;bar&lt;/b&gt;</p>', $res, 'Should encode tags and persist specified tag');
 	}
 
 	public function testHtmlAtts(): void
