@@ -1,42 +1,37 @@
 <?php
 
+namespace Templator;
+
+use FilesystemIterator;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
+
 trait TmpDirTestHelpersTrait
 {
-	protected static string $tmpdir;
+	protected static ?string $tmpdir = null;
 
-	protected static function tmpdir_make($dir_name): bool
+	protected static function tmpdir_make(): bool
 	{
-		$dir_name = str_replace([".", " "], "", microtime()) . '/' . $dir_name;
+		static::$tmpdir = rtrim(sys_get_temp_dir(), '/') . '/' . bin2hex(random_bytes(4));
 
-		static::$tmpdir = rtrim(sys_get_temp_dir(), '/') . '/' . $dir_name;
-
-		if (file_exists(static::$tmpdir)) {
-			static::tmpdir_remove();
-		}
-
-		if (!file_exists(static::$tmpdir)) {
-			mkdir(static::$tmpdir, 0755, true);
-		}
-
-		return file_exists(static::$tmpdir);
+		return file_exists(static::$tmpdir) ? false : mkdir(static::$tmpdir, 0755, true);
 	}
 
-	protected static function tmpdir_remove($tmpdir = null): void
+	protected static function tmpdir_remove(): bool
 	{
-		$tmpdir = is_null($tmpdir) ? static::$tmpdir : $tmpdir;
+		if (!is_null(static::$tmpdir)) {
+			return false;
+		}
+
 		$iterator = new RecursiveIteratorIterator(
-			new RecursiveDirectoryIterator($tmpdir, FilesystemIterator::SKIP_DOTS),
+			new RecursiveDirectoryIterator(static::$tmpdir, FilesystemIterator::SKIP_DOTS),
 			RecursiveIteratorIterator::CHILD_FIRST
 		);
 
 		foreach ($iterator as $filename => $fileInfo) {
-			if ($fileInfo->isDir()) {
-				rmdir($filename);
-			} else {
-				unlink($filename);
-			}
+			$fileInfo->isDir() ? rmdir($filename) : unlink($filename);
 		}
 
-		rmdir($tmpdir);
+		return rmdir(static::$tmpdir);
 	}
 }

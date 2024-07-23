@@ -2,8 +2,8 @@
 
 namespace Templator;
 
-use Exception;
 use Closure;
+use Exception;
 
 class View implements ViewInterface
 {

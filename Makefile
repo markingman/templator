@@ -17,10 +17,10 @@ setup: ## Set up environment in Docker container
 	@docker exec -it $(NAME) curl https://raw.githubusercontent.com/composer/getcomposer.org/76a7060ccb93902cd7576b67264ad91c8a2700e2/web/installer | php -- --quiet
 	@docker exec -it $(NAME) php composer.phar install
 
-install: ## Install composer in Container
+install: ## Install Ccomposer in Container
 	@docker exec -it $(NAME) php composer.phar install
 
-update: ## Update composer in Container
+update: ## Update Composer in Container
 	@docker exec -it $(NAME) php composer.phar update
 
 start: ## Start Docker container to run tests (if container built and stopped)
@@ -32,10 +32,10 @@ stop: ## Stop current container (if running)
 test: ## Run tests in Docker container
 	@docker exec -it $(NAME) vendor/bin/phpunit
 
-ssh: ## SSH to Docker container
+ssh: ## SSH into Docker container
 	@docker exec -it $(NAME) sh
 
 clean: ## Clean up
 	@docker stop $(NAME)
-	@rm -Rf vendor .phpunit.result.cache
+	@rm -Rf vendor .phpunit.result.cache *-coverage
 	@docker rm $(NAME)

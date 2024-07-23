@@ -1,7 +1,7 @@
 <?php
 
-use Templator\ViewHTML;
-use Templator\ViewHTMLInterface;
+namespace Templator;
+
 use PHPUnit\Framework\TestCase;
 
 class ViewHTMLTest extends TestCase

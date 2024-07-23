@@ -1,8 +1,9 @@
 <?php
 
+namespace Templator;
+
+use Exception;
 use PHPUnit\Framework\TestCase;
-use Templator\View;
-use Templator\ViewInterface;
 
 class ViewTest extends TestCase
 {
@@ -12,7 +13,7 @@ class ViewTest extends TestCase
 
 	public static function setUpBeforeClass(): void
 	{
-		static::tmpdir_make(self::class);
+		static::tmpdir_make();
 	}
 
 	public static function tearDownAfterClass(): void

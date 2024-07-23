@@ -4,23 +4,23 @@ namespace Templator;
 
 class ViewHTML extends View implements ViewHTMLInterface
 {
-	const ENT_HTML = ENT_HTML5;
+	const ENT_ENTITIES = ENT_QUOTES | ENT_HTML5;
+	const ENT_CHARS = ENT_NOQUOTES | ENT_HTML5;
 
 	public function htmlentities(string $s): string
 	{
-		return htmlentities($s, ENT_QUOTES | static::ENT_HTML, null, false);
+		return htmlentities($s, flags: static::ENT_ENTITIES, double_encode: false);
 	}
 
-	public function htmlspecialchars(string $s, array $t = null, bool $strip = true): string
+	public function htmlspecialchars(string $s, ?array $t = null, bool $strip = true): string
 	{
+		static $o = "\x02", $c = "\x03";
+
 		if (!str_contains($s, '<')) {
-			return htmlspecialchars($s, ENT_NOQUOTES | static::ENT_HTML, null, false);
+			return htmlspecialchars($s, flags: static::ENT_CHARS, double_encode: false);
 		}
 
 		if ($t) {
-			$o = chr(2);
-			$c = chr(3);
-
 			if (str_contains($s, $o)) {
 				$s = str_replace($o, '', $s);
 			}
@@ -41,7 +41,7 @@ class ViewHTML extends View implements ViewHTMLInterface
 			$s = strip_tags($s);
 		}
 
-		$s = htmlspecialchars($s, ENT_NOQUOTES | ENT_HTML5, null, false);
+		$s = htmlspecialchars($s, flags: static::ENT_CHARS, double_encode: false);
 
 		if ($t) {
 			$s = str_replace([$o, $c], ['<', '>'], $s);
