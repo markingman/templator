@@ -11,12 +11,20 @@ class View implements ViewInterface
 
 	public function __construct(string $path)
 	{
-		$this->path = realpath($path) . '/';
+		if (!$path = realpath($path)) {
+			throw new Exception("Could not set path");
+		}
+
+		$this->path = $path . DIRECTORY_SEPARATOR;
 	}
 
 	public function find(string $view): string|false
 	{
-		return realpath($this->path . $view);
+		if ($file = realpath($this->path . $view) and is_file($file)) {
+			return $file;
+		} else {
+			return false;
+		}
 	}
 
 	public function get(string $view, array $_VARS = null, $assume_ob = true): mixed

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- E.g: vendor/bin/phpunit -->
+<!-- Run from: vendor/bin/phpunit -->
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" bootstrap="tests/bootstrap.php" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/11.0/phpunit.xsd">
   <coverage includeUncoveredFiles="true" pathCoverage="false">
     <report>

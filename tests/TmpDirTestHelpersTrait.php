@@ -5,6 +5,7 @@ namespace Templator;
 use FilesystemIterator;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
+use Exception;
 
 trait TmpDirTestHelpersTrait
 {
@@ -12,14 +13,18 @@ trait TmpDirTestHelpersTrait
 
 	protected static function tmpdir_make(): bool
 	{
-		static::$tmpdir = rtrim(sys_get_temp_dir(), '/') . '/' . bin2hex(random_bytes(4));
+		try {
+			static::$tmpdir = rtrim(sys_get_temp_dir(), '/') . '/' . bin2hex(random_bytes(4));
+		} catch (Exception $e) {
+			throw new Exception(message: 'Could not create tmp dir', previous: $e);
+		}
 
-		return file_exists(static::$tmpdir) ? false : mkdir(static::$tmpdir, 0755, true);
+		return mkdir(static::$tmpdir, 0755, true);
 	}
 
 	protected static function tmpdir_remove(): bool
 	{
-		if (!is_null(static::$tmpdir)) {
+		if (is_null(static::$tmpdir)) {
 			return false;
 		}
 
@@ -28,8 +33,8 @@ trait TmpDirTestHelpersTrait
 			RecursiveIteratorIterator::CHILD_FIRST
 		);
 
-		foreach ($iterator as $filename => $fileInfo) {
-			$fileInfo->isDir() ? rmdir($filename) : unlink($filename);
+		foreach ($iterator as $file => $info) {
+			$info->isDir() ? rmdir($file) : unlink($file);
 		}
 
 		return rmdir(static::$tmpdir);

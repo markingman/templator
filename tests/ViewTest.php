@@ -31,6 +31,13 @@ class ViewTest extends TestCase
 		$this->assertInstanceOf(ViewInterface::class, $this->View);
 	}
 
+	public function testCreateFailure(): void
+	{
+		$this->expectException(Exception::class);
+		$this->expectExceptionMessage('Could not set path');
+   		new View('./--missing--');
+	}
+
 	public function testGetMissing(): void
 	{
 		$view = '--missing--';
