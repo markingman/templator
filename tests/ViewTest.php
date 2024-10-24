@@ -13,16 +13,24 @@ class ViewTest extends TestCase
 
 	public static function setUpBeforeClass(): void
 	{
-		static::tmpdir_make();
+		if (!static::tmpdir_make()) {
+			throw new Exception('Could not create tmpdir');
+		}
 	}
 
 	public static function tearDownAfterClass(): void
 	{
-		static::tmpdir_remove();
+		if (!static::tmpdir_remove()) {
+			throw new Exception('Could not create tmpdir');
+		}
 	}
 
 	public function setUp(): void
 	{
+		if (is_null(static::$tmpdir)) {
+			throw new Exception(message: 'tmpdir not set');
+		}
+
 		$this->View = new View(static::$tmpdir);
 	}
 
@@ -98,6 +106,41 @@ __
 
 		$res = $this->View->fetch($tmpl)();
 		$this->assertEquals('<h1>A</h1>', $res);
+	}
+
+	public function testFetchNested(): void
+	{
+		$tmpl1 = 'tmpl1.php';
+		$tmpl2 = 'tmpl2.php';
+
+		file_put_contents(static::$tmpdir . '/' . $tmpl1, <<<__
+<?php
+
+use Templator\View;
+
+return function(View \$View): string {
+	return \$View->fetch('$tmpl2')('test');
+};
+
+__
+		);
+
+		file_put_contents(static::$tmpdir . '/' . $tmpl2, <<<__
+<?php 
+return function(string \$var): string {
+	ob_start();
+
+	if (\$var === 'test') { 
+		?><p>test</p><?php 
+	}
+
+	return ob_get_clean();
+};
+
+__
+		);
+		$res = $this->View->fetch($tmpl1)($this->View);
+		$this->assertEquals('<p>test</p>', $res);
 	}
 
 	public function testFetchExceptionNothingFound(): void

@@ -2,6 +2,7 @@
 
 namespace Templator;
 
+use Exception;
 use PHPUnit\Framework\TestCase;
 
 class ViewHTMLTest extends TestCase
@@ -52,6 +53,12 @@ class ViewHTMLTest extends TestCase
 
 		$res = $this->ViewHTML->htmlspecialchars('<p>' . chr(3) . 'foo<b>bar</b>' . chr(2) . '</p>', ['p'], false);
 		$this->assertEquals('<p>foo&lt;b&gt;bar&lt;/b&gt;</p>', $res, 'Should encode tags and persist specified tag');
+
+		$this->expectException(Exception::class);
+		$this->expectExceptionMessage('Could not replace tags due to preg_replace error');
+
+		$res = $this->ViewHTML->htmlspecialchars('<b>bar</b>', ['~'], false);
+		$this->assertEquals('&gt;bar&lt;', $res, '..');
 	}
 
 	public function testHtmlAtts(): void

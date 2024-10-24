@@ -2,6 +2,8 @@
 
 namespace Templator;
 
+use Exception;
+
 class ViewHTML extends View implements ViewHTMLInterface
 {
 	const ENT_ENTITIES = ENT_QUOTES | ENT_HTML5;
@@ -12,6 +14,10 @@ class ViewHTML extends View implements ViewHTMLInterface
 		return htmlentities($s, flags: static::ENT_ENTITIES, double_encode: false);
 	}
 
+	/**
+	 * @param array<string> $t
+	 * @throws Exception
+	 */
 	public static function htmlspecialchars(string $s, ?array $t = null, bool $strip = true): string
 	{
 		static $o = "\x02", $c = "\x03";
@@ -33,10 +39,14 @@ class ViewHTML extends View implements ViewHTMLInterface
 				$s = strip_tags($s, '<' . implode('><', $t) . '>');
 			}
 
-			$s = preg_replace(
+			$s = @preg_replace(
 				'~' . '<' . '(/*(' . implode('|', $t) . ')( [^>]*)*)' . '>' . '~',
 				$o . '$1' . $c, $s
 			);
+	
+			if (is_null($s)) {
+				throw new Exception('Could not replace tags due to preg_replace error');
+			}
 		} elseif ($strip) {
 			$s = strip_tags($s);
 		}
@@ -50,6 +60,10 @@ class ViewHTML extends View implements ViewHTMLInterface
 		return $s;
 	}
 
+	/** 
+	 * @param array<string, string|bool> $atts
+	 * @param array<string> $mask
+	 */
 	public static function htmlatts(array $atts = [], array $mask = []): string
 	{
 		if ($mask) {
@@ -58,19 +72,22 @@ class ViewHTML extends View implements ViewHTMLInterface
 
 		$ret = '';
 		foreach ($atts as $k => $v) {
-			if (is_bool($v)) {
-				if ($v) {
-					$ret .= $k . ' ';
+			if (is_string($k)) {
+				if (is_bool($v)) {
+					if ($v) {
+						$ret .= $k . ' ';
+					}
+				} elseif (is_string($v)) {
+					$ret .= $k . '="' . static::htmlentities($v) . '" ';
 				}
-			} elseif (!is_null($v)) {
-				$ret .= $k . '="' . static::htmlentities($v) . '" ';
 			}
 		}
 
 		return substr($ret, 0, -1);
 	}
 
-	public static function tag(string $tag, array $atts = null, string $html = ''): string
+	/** @param array<string, string|bool> $atts */
+	public static function tag(string $tag, ?array $atts = null, string $html = ''): string
 	{
 		// e.g:
 		// tag('img/', ['src' => 'a.jpg']) 

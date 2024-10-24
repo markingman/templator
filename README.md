@@ -10,18 +10,23 @@ To use, require in `composer.json`, e.g:
         "markingman/templator": "dev-main#[TAG]",
     }
 
+Templates are set up as closures with typed arguments. For example:
+
+	<?php
+	
+	use Templator\ViewHTML as View;
+
+	return function(string $var, bool $val = true): string {
+		ob_start();
+		?>
+			<?php if ($val) { ?>
+				<p><?= View::htmlspecialchars($var) ?></p>	
+			<?php } ?>
+
+			<?= View::tag('hr/', ['class' => 'rule']) ?>
+		<?php
+	}
+
 ## Development
 
-For development `cd` into this directory.
-
-Run `make` for list of options, for example:
-
-Run `make build` to build and start Docker container to run tests.
-
-Run `make setup` to get Composer dependencies.
-
-Run `make start` to create a Docker container (with current PHP version).
-
-Run `make tests` to run tests in Docker container.
-
-Run `make stop` to stop Docker container.
+Run `make` for list of options.

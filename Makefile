@@ -10,29 +10,8 @@ help:
 build: ## Build a Docker image for local development
 	@docker build -t $(NAME) .
 
-run: ## Run the Docker image
-	@docker run -d -v `pwd`:/var/www/html --name $(NAME) $(NAME)
+test: ## Start container to run tests (if container built and stopped)
+	@docker run -it --rm -v `pwd`/src:/usr/src/myapp/src -v `pwd`/tests:/usr/src/myapp/tests -v `pwd`/phpunit-coverage:/usr/src/myapp/phpunit-coverage $(NAME) vendor/bin/phpunit
 
-setup: ## Set up environment in container
-	@docker exec -it $(NAME) curl https://raw.githubusercontent.com/composer/getcomposer.org/76a7060ccb93902cd7576b67264ad91c8a2700e2/web/installer | php -- --quiet
-	@docker exec -it $(NAME) php composer.phar install
-
-update: ## Update existing environment in container
-	@docker exec -it $(NAME) php composer.phar update
-
-start: ## Start container to run tests (if container built and stopped)
-	@docker container start $(NAME)
-
-stop: ## Stop current container (if running)
-	@docker stop $(NAME)
-
-test: ## Run tests inside the container
-	@docker exec -it $(NAME) vendor/bin/phpunit
-
-ssh: ## SSH into container
-	@docker exec -it $(NAME) sh
-
-clean: ## Clean up
-	@docker stop $(NAME)
-	@rm -Rf vendor .phpunit.result.cache *-coverage
-	@docker rm $(NAME)
+analyse: ## Start container to run tests (if container built and stopped)
+	@docker run -it --rm -v `pwd`/src:/usr/src/myapp/src -v `pwd`/tests:/usr/src/myapp/tests $(NAME) vendor/bin/phpstan analyse -c phpstan.neon

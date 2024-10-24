@@ -6,6 +6,7 @@ use FilesystemIterator;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use Exception;
+use SplFileInfo;
 
 trait TmpDirTestHelpersTrait
 {
@@ -16,10 +17,14 @@ trait TmpDirTestHelpersTrait
 		try {
 			static::$tmpdir = rtrim(sys_get_temp_dir(), '/') . '/' . bin2hex(random_bytes(4));
 		} catch (Exception $e) {
-			throw new Exception(message: 'Could not create tmp dir', previous: $e);
+			throw new Exception(message: 'Could not create tmpdir; ' . $e->getMessage());
 		}
 
-		return mkdir(static::$tmpdir, 0755, true);
+		if (!mkdir(static::$tmpdir, 0755, true)) {
+			throw new Exception(message: 'Could not create tmpdir');
+		}
+
+		return true;
 	}
 
 	protected static function tmpdir_remove(): bool
@@ -34,9 +39,15 @@ trait TmpDirTestHelpersTrait
 		);
 
 		foreach ($iterator as $file => $info) {
-			$info->isDir() ? rmdir($file) : unlink($file);
+			if (is_string($file) and $info instanceof SplFileInfo) {
+				$info->isDir() ? rmdir($file) : unlink($file);
+			}
 		}
 
-		return rmdir(static::$tmpdir);
+		if (!rmdir(static::$tmpdir)) {
+			throw new Exception(message: 'Could not remove tmpdir');
+		}
+
+		return true;
 	}
 }

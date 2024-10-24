@@ -1,12 +1,13 @@
-FROM php:8.3-apache
+FROM php:8.3-cli
 
-RUN pecl install xdebug
-RUN echo "zend_extension=/usr/local/lib/php/extensions/no-debug-non-zts-20230831/xdebug.so" > /usr/local/etc/php/conf.d/xdebug.ini
-RUN echo "xdebug.xdebug.mode=debug" >> /usr/local/etc/php/conf.d/xdebug.ini
-RUN echo "xdebug.xdebug.start_with_request=yes" >> /usr/local/etc/php/conf.d/xdebug.ini
-RUN echo "xdebug.mode=coverage" >> /usr/local/etc/php/conf.d/xdebug.ini
+RUN apt-get update && apt-get install -y zip
+RUN pecl install xdebug-3.3.2 \
+	&& docker-php-ext-enable xdebug
 
-RUN apt-get update && apt-get install -y unzip p7zip ssl-cert
+COPY --from=composer:2.8.1 /usr/bin/composer /usr/bin/composer
 
-RUN a2enmod rewrite ssl headers expires
-RUN a2ensite default-ssl.conf
+COPY . /usr/src/myapp
+WORKDIR /usr/src/myapp
+RUN /usr/bin/composer install
+
+ENV XDEBUG_MODE=coverage
