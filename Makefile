@@ -10,8 +10,8 @@ help:
 build: ## Build a Docker image for local development
 	@docker build -t $(NAME) .
 
-test: ## Start container to run tests (if container built and stopped)
+test: ## Start container to run tests
 	@docker run -it --rm -v `pwd`/src:/usr/src/myapp/src -v `pwd`/tests:/usr/src/myapp/tests -v `pwd`/phpunit-coverage:/usr/src/myapp/phpunit-coverage $(NAME) vendor/bin/phpunit
 
-analyse: ## Start container to run tests (if container built and stopped)
+analyse: ## Start container to run analyse
 	@docker run -it --rm -v `pwd`/src:/usr/src/myapp/src -v `pwd`/tests:/usr/src/myapp/tests $(NAME) vendor/bin/phpstan analyse -c phpstan.neon

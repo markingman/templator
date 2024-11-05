@@ -25,6 +25,7 @@ Templates are set up as closures with typed arguments. For example:
 
 			<?= View::tag('hr/', ['class' => 'rule']) ?>
 		<?php
+		return ob_get_clean();
 	}
 
 ## Development
