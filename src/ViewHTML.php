@@ -61,7 +61,7 @@ class ViewHTML extends View implements ViewHTMLInterface
 	}
 
 	/** 
-	 * @param array<string, string|bool> $atts
+	 * @param array<string, string|bool|null> $atts
 	 * @param array<string> $mask
 	 */
 	public static function htmlatts(array $atts = [], array $mask = []): string
@@ -86,7 +86,7 @@ class ViewHTML extends View implements ViewHTMLInterface
 		return substr($ret, 0, -1);
 	}
 
-	/** @param array<string, string|bool> $atts */
+	/** @param array<string, string|bool|null> $atts */
 	public static function tag(string $tag, ?array $atts = null, string $html = ''): string
 	{
 		// e.g:
