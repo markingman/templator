@@ -96,7 +96,10 @@ class ViewHTML extends View implements ViewHTMLInterface
 		// tag('/div')
 		// tag('script/', ['src' => 'script.js'], PHP_EOL)
 
-		if ($close = boolval(strpos($tag, '/'))) {
+		if (str_starts_with($tag, '/')) {
+			return '<' . $tag . '>';
+		}
+		if ($close = str_ends_with($tag, '/')) {
 			$tag = rtrim($tag, '/');
 		}
 		$s = '<' . $tag;

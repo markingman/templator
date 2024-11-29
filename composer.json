@@ -9,7 +9,13 @@
   "autoload": {
     "psr-4": {
       "Templator\\": [
-        "src/",
+        "src/"
+      ]
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Templator\\": [
         "tests/"
       ]
     }
