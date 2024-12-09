@@ -61,7 +61,7 @@ class ViewHTML extends View implements ViewHTMLInterface
 	}
 
 	/** 
-	 * @param array<string, string|bool|null> $atts
+	 * @param array<string, int|string|bool|null> $atts
 	 * @param array<string> $mask
 	 */
 	public static function htmlatts(array $atts = [], array $mask = []): string
@@ -77,8 +77,8 @@ class ViewHTML extends View implements ViewHTMLInterface
 					if ($v) {
 						$ret .= $k . ' ';
 					}
-				} elseif (is_string($v)) {
-					$ret .= $k . '="' . static::htmlentities($v) . '" ';
+				} elseif (is_string($v) or is_int($v)) {
+					$ret .= $k . '="' . static::htmlentities((string)$v) . '" ';
 				}
 			}
 		}
@@ -86,7 +86,7 @@ class ViewHTML extends View implements ViewHTMLInterface
 		return substr($ret, 0, -1);
 	}
 
-	/** @param array<string, string|bool|null> $atts */
+	/** @param array<string, int|string|bool|null> $atts */
 	public static function tag(string $tag, ?array $atts = null, string $html = ''): string
 	{
 		// e.g:
@@ -99,13 +99,17 @@ class ViewHTML extends View implements ViewHTMLInterface
 		if (str_starts_with($tag, '/')) {
 			return '<' . $tag . '>';
 		}
+
 		if ($close = str_ends_with($tag, '/')) {
 			$tag = rtrim($tag, '/');
 		}
+
 		$s = '<' . $tag;
+
 		if ($atts) {
 			$s .= ' ' . static::htmlatts($atts);
 		}
+
 		if ($html !== '') {
 			$s .= '>' . $html;
 			if ($close) {
@@ -114,9 +118,11 @@ class ViewHTML extends View implements ViewHTMLInterface
 
 			return $s;
 		}
+
 		if ($close) {
 			$s .= ' /';
 		}
+
 		$s .= '>';
 
 		return $s;
