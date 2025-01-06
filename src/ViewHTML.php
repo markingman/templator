@@ -14,6 +14,11 @@ class ViewHTML extends View implements ViewHTMLInterface
 		return htmlentities($s, flags: static::ENT_ENTITIES, double_encode: false);
 	}
 
+	public static function htmlidentities(string $s): string
+	{
+		return (string)preg_replace('/[^a-zA-Z0-9\-_:.]/', '', $s);
+	}
+
 	/**
 	 * @param array<string> $t
 	 * @throws Exception
@@ -78,7 +83,10 @@ class ViewHTML extends View implements ViewHTMLInterface
 						$ret .= $k . ' ';
 					}
 				} elseif (is_string($v) or is_int($v)) {
-					$ret .= $k . '="' . static::htmlentities((string)$v) . '" ';
+					$ret .= $k . '="' . match($k) {
+						'id', 'for' => static::htmlidentities((string)$v),
+						default => static::htmlentities((string)$v)
+					} . '" ';
 				}
 			}
 		}
