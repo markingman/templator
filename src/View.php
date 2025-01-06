@@ -33,7 +33,11 @@ class View implements ViewInterface
 			throw new Exception("Nothing found at '$path'");
 		}
 
-		if (!($closure = include $realpath) instanceof Closure) {
+		if (!(
+			$closure = (Closure::bind(static function ($path): mixed {
+				return include $path;
+			}, null, null))($realpath)
+		) instanceof Closure) {
 			throw new Exception("Closure not found at '$path'");
 		}
 
