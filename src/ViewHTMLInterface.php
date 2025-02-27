@@ -16,5 +16,5 @@ interface ViewHTMLInterface
 	public static function htmlatts(array $atts = [], array $mask = []): string;
 
 	/** @param array<string, string|bool> $atts */
-	public static function tag(string $tag, array $atts = null, string $html = ''): string;
+	public static function tag(string $tag, ?array $atts = null, string $html = ''): string;
 }
