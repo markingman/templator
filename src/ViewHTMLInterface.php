@@ -7,7 +7,7 @@ interface ViewHTMLInterface
 	public static function htmlentities(string $s): string;
 
 	/** @param array<string> $t */
-	public static function htmlspecialchars(string $s, array $t = null, bool $strip = true): string;
+	public static function htmlspecialchars(string $s, ?array $t = null, bool $strip = true): string;
 
 	/** 
 	 * @param array<string, string|bool> $atts
