@@ -6,8 +6,8 @@ use Exception;
 
 class ViewHTML extends View implements ViewHTMLInterface
 {
-	const ENT_ENTITIES = ENT_QUOTES | ENT_HTML5;
-	const ENT_CHARS = ENT_NOQUOTES | ENT_HTML5;
+	const ENT_ENTITIES = ENT_QUOTES | ENT_HTML401;
+	const ENT_CHARS = ENT_NOQUOTES | ENT_HTML401;
 
 	public static function htmlentities(string $s): string
 	{
