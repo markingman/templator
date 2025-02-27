@@ -41,7 +41,7 @@ class ViewHTML extends View implements ViewHTMLInterface
 			}
 
 			if ($strip) {
-				$s = strip_tags($s, '<' . implode('><', $t) . '>');
+				$s = strip_tags($s, $t);
 			}
 
 			$s = @preg_replace(
