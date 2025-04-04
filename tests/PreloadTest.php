@@ -4,6 +4,7 @@ namespace Templator;
 
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
+use RuntimeException;
 
 class PreloadTest extends TestCase
 {
@@ -23,6 +24,10 @@ class PreloadTest extends TestCase
 
 	public function setUp(): void
 	{
+		if (!is_string(static::$tmpdir) or !is_dir(static::$tmpdir) or !is_writable(static::$tmpdir)) {
+			throw new RuntimeException('Expected writable tmp dir');
+		}
+
 		$this->Preload = new Preload(static::$tmpdir);
 	}
 
@@ -70,10 +75,11 @@ EOF
 		);
 		$this->assertFileExists(static::$tmpdir . '/' . $fn . '.php');
 
-		$this->assertFalse(function_exists("Templator\\preload\\$fn"));
+		$fn_name = "Templator\\preload\\$fn";
+		$this->assertFalse(function_exists($fn_name));
 		$this->Preload->preload($fn . '.php');
-		$this->assertTrue(function_exists("Templator\\preload\\$fn"));
-		$this->assertEquals('ok', call_user_func("Templator\\preload\\$fn"));
+		$this->assertTrue(function_exists($fn_name));
+		$this->assertEquals('ok', call_user_func($fn_name));
 	}
 
 	public function testPreloadMissing(): void
@@ -100,17 +106,18 @@ EOF
 		);
 		$this->assertFileExists(static::$tmpdir . '/' . $fn . '.php');
 
-		$this->assertFalse(function_exists("Templator\\preload\\$fn"));
+		$fn_name = "Templator\\preload\\$fn";
+		$this->assertFalse(function_exists($fn_name));
 
 		$this->Preload->preload($fn . '.php');
-		$this->assertTrue(function_exists("Templator\\preload\\$fn"));
-		$this->assertEquals('ok', call_user_func("Templator\\preload\\$fn"));
+		$this->assertTrue(function_exists($fn_name));
+		$this->assertEquals('ok', call_user_func($fn_name));
 
 		for ($i = 0; $i < 2; $i++) {
 			$this->Preload->preload($fn . '.php');
 		}
-		$this->assertTrue(function_exists("Templator\\preload\\$fn"));
-		$this->assertEquals('ok', call_user_func("Templator\\preload\\$fn"));
+		$this->assertTrue(function_exists($fn_name));
+		$this->assertEquals('ok', call_user_func($fn_name));
 	}
 
 	public function testPreloadWildcard(): void
@@ -148,18 +155,21 @@ EOF
 		);
 		$this->assertFileExists(static::$tmpdir . '/' . $dir1 . '/' . $dir2 . '/' . $fn2 . '.php');
 
-		$this->assertFalse(function_exists("Templator\\preload\\$dir1\\$fn1"));
-		$this->assertFalse(function_exists("Templator\\preload\\$dir1\\$dir2\\$fn2"));
+		$fn1_name = "Templator\\preload\\$dir1\\$fn1";
+		$fn2_name = "Templator\\preload\\$dir1\\$dir2\\$fn2";
+
+		$this->assertFalse(function_exists($fn1_name));
+		$this->assertFalse(function_exists($fn2_name));
 
 		$this->Preload->preload($dir1a . '/*');
-		$this->assertFalse(function_exists("Templator\\preload\\$dir1\\$fn1"));
-		$this->assertFalse(function_exists("Templator\\preload\\$dir1\\$dir2\\$fn2"));
+		$this->assertFalse(function_exists($fn1_name));
+		$this->assertFalse(function_exists($fn2_name));
 
 		$this->Preload->preload($dir1 . '/*');
-		$this->assertTrue(function_exists("Templator\\preload\\$dir1\\$fn1"));
-		$this->assertEquals('ok', call_user_func("Templator\\preload\\$dir1\\$fn1"));
-		$this->assertTrue(function_exists("Templator\\preload\\$dir1\\$dir2\\$fn2"));
-		$this->assertEquals('ok', call_user_func("Templator\\preload\\$dir1\\$dir2\\$fn2"));
+		$this->assertTrue(function_exists($fn1_name));
+		$this->assertEquals('ok', call_user_func($fn1_name));
+		$this->assertTrue(function_exists($fn2_name));
+		$this->assertEquals('ok', call_user_func($fn2_name));
 	}
 
 	public function testPreloadDirMissing(): void
