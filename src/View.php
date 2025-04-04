@@ -1,44 +1,35 @@
-<?php declare(strict_types = 1);
+<?php declare(strict_types=1);
 
 namespace Templator;
 
 use Closure;
-use Exception;
+use InvalidArgumentException;
+use UnexpectedValueException;
 
-class View implements ViewInterface
+class View extends AbstractPathLoader implements ViewInterface
 {
-	protected string $path;
-
-	public function __construct(string $path)
+	public static function ob_start(): void
 	{
-		if (!$path = realpath($path)) {
-			throw new Exception("Could not set path");
-		}
-
-		$this->path = $path . DIRECTORY_SEPARATOR;
+		ob_start();
 	}
 
-	public function find(string $view): string|false
+	public static function ob_get_clean(): string
 	{
-		if ($file = realpath($this->path . $view) and is_file($file)) {
-			return $file;
-		} else {
-			return false;
-		}
+		return strval(ob_get_clean());
 	}
 
 	public function fetch(string $path): Closure
 	{
 		if (!$realpath = $this->find($path)) {
-			throw new Exception("Nothing found at '$path'");
+			throw new InvalidArgumentException("Nothing found at '$path'");
 		}
 
 		if (!(
 			$closure = (Closure::bind(static function ($path): mixed {
 				return include $path;
 			}, null, null))($realpath)
-		) instanceof Closure) {
-			throw new Exception("Closure not found at '$path'");
+			) instanceof Closure) {
+			throw new UnexpectedValueException("Closure not found at '$path'");
 		}
 
 		return $closure;

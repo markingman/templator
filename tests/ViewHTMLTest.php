@@ -2,7 +2,7 @@
 
 namespace Templator;
 
-use Exception;
+use LogicException;
 use PHPUnit\Framework\TestCase;
 
 class ViewHTMLTest extends TestCase
@@ -54,7 +54,7 @@ class ViewHTMLTest extends TestCase
 		$res = $this->ViewHTML->htmlspecialchars('<p>' . chr(3) . 'foo<b>bar</b>' . chr(2) . '</p>', ['p'], false);
 		$this->assertEquals('<p>foo&lt;b&gt;bar&lt;/b&gt;</p>', $res, 'Should encode tags and persist specified tag');
 
-		$this->expectException(Exception::class);
+		$this->expectException(LogicException::class);
 		$this->expectExceptionMessage('Could not replace tags due to preg_replace error');
 
 		$res = $this->ViewHTML->htmlspecialchars('<b>bar</b>', ['~'], false);
@@ -95,5 +95,12 @@ class ViewHTMLTest extends TestCase
 
 		$res = $this->ViewHTML->tag('tag/', ['foo' => 'bar', 'bool' => true, 'esc' => '"']);
 		$this->assertEquals('<tag foo="bar" bool esc="&quot;" />', $res, 'Should make closed tag with attributes');
+	}
+
+	public function testObStartGetClean(): void
+	{
+		ViewHTML::ob_start();
+		echo 'Test 123';
+		$this->assertEquals('Test 123', ViewHTML::ob_get_clean(), 'Should capture and return output buffer');
 	}
 }

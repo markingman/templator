@@ -16,6 +16,7 @@
     <testsuite name="Templator Test Suite">
       <file>tests/ViewTest.php</file>
       <file>tests/ViewHTMLTest.php</file>
+      <file>tests/PreloadTest.php</file>
     </testsuite>
   </testsuites>
   <source>

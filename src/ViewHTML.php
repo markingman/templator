@@ -1,8 +1,8 @@
-<?php declare(strict_types = 1);
+<?php declare(strict_types=1);
 
 namespace Templator;
 
-use Exception;
+use LogicException;
 
 class ViewHTML extends View implements ViewHTMLInterface
 {
@@ -14,14 +14,8 @@ class ViewHTML extends View implements ViewHTMLInterface
 		return htmlentities($s, flags: static::ENT_ENTITIES, double_encode: false);
 	}
 
-	public static function htmlidentities(string $s): string
-	{
-		return (string)preg_replace('/[^a-zA-Z0-9\-_:.]/', '', $s);
-	}
-
 	/**
 	 * @param array<string> $t
-	 * @throws Exception
 	 */
 	public static function htmlspecialchars(string $s, ?array $t = null, bool $strip = true): string
 	{
@@ -45,12 +39,11 @@ class ViewHTML extends View implements ViewHTMLInterface
 			}
 
 			$s = @preg_replace(
-				'~' . '<' . '(/*(' . implode('|', $t) . ')( [^>]*)*)' . '>' . '~',
-				$o . '$1' . $c, $s
+				'~<' . '(/*(' . implode('|', $t) . ')( [^>]*)*)' . '>~', $o . '$1' . $c, $s
 			);
-	
-			if (is_null($s)) {
-				throw new Exception('Could not replace tags due to preg_replace error');
+
+			if ($s === null || preg_last_error() !== PREG_NO_ERROR) {
+				throw new LogicException('Could not replace tags due to preg_replace error: ' . preg_last_error());
 			}
 		} elseif ($strip) {
 			$s = strip_tags($s);
@@ -65,7 +58,7 @@ class ViewHTML extends View implements ViewHTMLInterface
 		return $s;
 	}
 
-	/** 
+	/**
 	 * @param array<string, int|string|bool|null> $atts
 	 * @param array<string> $mask
 	 */
@@ -83,10 +76,7 @@ class ViewHTML extends View implements ViewHTMLInterface
 						$ret .= $k . ' ';
 					}
 				} elseif (is_string($v) or is_int($v)) {
-					$ret .= $k . '="' . match($k) {
-						'id', 'for' => static::htmlidentities((string)$v),
-						default => static::htmlentities((string)$v)
-					} . '" ';
+					$ret .= $k . '="' . static::htmlentities((string)$v) . '" ';
 				}
 			}
 		}

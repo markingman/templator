@@ -1,4 +1,4 @@
-<?php declare(strict_types = 1);
+<?php declare(strict_types=1);
 
 namespace Templator;
 
@@ -9,7 +9,7 @@ interface ViewHTMLInterface
 	/** @param array<string> $t */
 	public static function htmlspecialchars(string $s, ?array $t = null, bool $strip = true): string;
 
-	/** 
+	/**
 	 * @param array<string, string|bool> $atts
 	 * @param array<string> $mask
 	 */

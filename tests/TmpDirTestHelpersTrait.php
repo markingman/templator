@@ -5,8 +5,9 @@ namespace Templator;
 use FilesystemIterator;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
-use Exception;
+use RuntimeException;
 use SplFileInfo;
+use Throwable;
 
 trait TmpDirTestHelpersTrait
 {
@@ -14,14 +15,18 @@ trait TmpDirTestHelpersTrait
 
 	protected static function tmpdir_make(): bool
 	{
+		if (!is_writable(sys_get_temp_dir())) {
+			throw new RuntimeException('Cannot write to tmp dir');
+		}
+
 		try {
 			static::$tmpdir = rtrim(sys_get_temp_dir(), '/') . '/' . bin2hex(random_bytes(4));
-		} catch (Exception $e) {
-			throw new Exception(message: 'Could not create tmpdir; ' . $e->getMessage());
+		} catch (Throwable $e) {
+			throw new RuntimeException(message: 'Could not create tmp dir; ' . $e->getMessage());
 		}
 
 		if (!mkdir(static::$tmpdir, 0755, true)) {
-			throw new Exception(message: 'Could not create tmpdir');
+			throw new RuntimeException('Could not create tmp dir');
 		}
 
 		return true;
@@ -45,7 +50,7 @@ trait TmpDirTestHelpersTrait
 		}
 
 		if (!rmdir(static::$tmpdir)) {
-			throw new Exception(message: 'Could not remove tmpdir');
+			throw new RuntimeException('Could not remove tmpdir');
 		}
 
 		return true;
