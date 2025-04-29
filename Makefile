@@ -11,7 +11,7 @@ build: ## Build a Docker image for local development
 	@docker build -t $(NAME) .
 
 test: ## Run container for tests
-	@docker run -it --rm -v `pwd`/src:/usr/src/myapp/src -v `pwd`/tests:/usr/src/myapp/tests -v `pwd`/phpunit-coverage:/usr/src/myapp/phpunit-coverage $(NAME) vendor/bin/phpunit
+	@docker run -it --rm -v `pwd`/src:/usr/src/app/src -v `pwd`/tests:/usr/src/app/tests -v `pwd`/phpunit-coverage:/usr/src/app/phpunit-coverage $(NAME) vendor/bin/phpunit
 
 analyse: ## Run container for analyse
-	@docker run -it --rm -v `pwd`/src:/usr/src/myapp/src -v `pwd`/tests:/usr/src/myapp/tests $(NAME) vendor/bin/phpstan analyse -c phpstan.neon
+	@docker run -it --rm -v `pwd`/src:/usr/src/app/src -v `pwd`/tests:/usr/src/app/tests $(NAME) vendor/bin/phpstan analyse -c phpstan.neon

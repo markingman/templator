@@ -6,8 +6,8 @@ RUN pecl install xdebug-3.3.2 \
 
 COPY --from=composer:2.8.1 /usr/bin/composer /usr/bin/composer
 
-COPY . /usr/src/myapp
-WORKDIR /usr/src/myapp
+COPY . /usr/src/app
+WORKDIR /usr/src/app
 RUN /usr/bin/composer install
 
 ENV XDEBUG_MODE=coverage
