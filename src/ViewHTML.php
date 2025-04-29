@@ -70,14 +70,12 @@ class ViewHTML extends View implements ViewHTMLInterface
 
 		$ret = '';
 		foreach ($atts as $k => $v) {
-			if (is_string($k)) {
-				if (is_bool($v)) {
-					if ($v) {
-						$ret .= $k . ' ';
-					}
-				} elseif (is_string($v) or is_int($v)) {
-					$ret .= $k . '="' . static::htmlentities((string)$v) . '" ';
+			if (is_bool($v)) {
+				if ($v) {
+					$ret .= $k . ' ';
 				}
+			} elseif (is_string($v) or is_int($v)) {
+				$ret .= $k . '="' . static::htmlentities((string)$v) . '" ';
 			}
 		}
 

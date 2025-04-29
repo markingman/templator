@@ -116,7 +116,6 @@ EOF
 		for ($i = 0; $i < 2; $i++) {
 			$this->Preload->preload($fn . '.php');
 		}
-		$this->assertTrue(function_exists($fn_name));
 		$this->assertEquals('ok', call_user_func($fn_name));
 	}
 

@@ -1,7 +1,10 @@
-FROM php:8.3-cli
+ARG PHP_VERSION=8.3
+FROM php:${PHP_VERSION}-cli
 
-RUN apt-get update && apt-get install -y zip
-RUN pecl install xdebug-3.3.2 \
+RUN apt-get update && apt-get install -y \
+	zip
+
+RUN pecl install xdebug-3.4.2 \
 	&& docker-php-ext-enable xdebug
 
 COPY --from=composer:2.8.1 /usr/bin/composer /usr/bin/composer

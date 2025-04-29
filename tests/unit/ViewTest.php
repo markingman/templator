@@ -4,14 +4,22 @@ namespace Templator;
 
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
+use UnexpectedValueException;
+use RuntimeException;
 
 class ViewTest extends TestCase
 {
+	protected string $path_fixtures;
 	protected View $View;
 
 	public function setUp(): void
 	{
-		$this->View = new View(__DIR__ . '/fixtures');
+		if (!$path_fixtures = realpath(__DIR__ . '/../fixtures')) {
+			throw new RuntimeException('Could not find fixtures');
+		}
+
+		$this->path_fixtures = $path_fixtures;
+		$this->View = new View($this->path_fixtures);
 	}
 
 	public function testCreate(): void
@@ -28,17 +36,12 @@ class ViewTest extends TestCase
 
 	public function testFind(): void
 	{
-		$this->assertEquals(__DIR__ . '/fixtures/fetch_simple.php', $this->View->find('fetch_simple.php'));
+		$this->assertEquals($this->path_fixtures . '/fetch_simple.php', $this->View->find('fetch_simple.php'));
 	}
 
 	public function testFindMissing(): void
 	{
 		$this->assertFalse($this->View->find('-MISSING-'));
-	}
-
-	public function testFetch(): void
-	{
-		$this->assertIsCallable($this->View->fetch('fetch_simple.php'));
 	}
 
 	public function testFetchAndCall(): void
