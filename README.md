@@ -12,7 +12,13 @@ composer require markingman/templator
 
 ## Usage
 
-Templates are set up as closures with typed arguments. For example:
+Templates are set up as PHP code.
+
+Templates can be closures called by the `fetch()` method, or as namespace functions that can be preloaded with the `Preload` class.
+
+Alternatively, templates could be from class methods and leverage PHP's class autoloading.
+
+For example, a closure template.
 
 ```php
 <?php
