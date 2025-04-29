@@ -2,7 +2,7 @@
 
 namespace Templator;
 
-use Exception;
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 
 class ViewTest extends TestCase
@@ -21,7 +21,7 @@ class ViewTest extends TestCase
 
 	public function testCreateFailure(): void
 	{
-		$this->expectException(Exception::class);
+		$this->expectException(InvalidArgumentException::class);
 		$this->expectExceptionMessage('Could not set path');
 		new View('./--missing--');
 	}
@@ -63,14 +63,14 @@ class ViewTest extends TestCase
 
 	public function testFetchExceptionNothingFound(): void
 	{
-		$this->expectException(Exception::class);
+		$this->expectException(InvalidArgumentException::class);
 		$this->expectExceptionMessage("Nothing found at 'MISSING'");
 		$this->View->fetch('MISSING')();
 	}
 
 	public function testFetchExceptionClosureNotFound(): void
 	{
-		$this->expectException(Exception::class);
+		$this->expectException(UnexpectedValueException::class);
 		$this->expectExceptionMessage("Closure not found at 'fetch_not_closure.php'");
 		$this->View->fetch('fetch_not_closure.php')();
 	}
