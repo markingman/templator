@@ -4,8 +4,8 @@ namespace Templator;
 
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
-use UnexpectedValueException;
 use RuntimeException;
+use UnexpectedValueException;
 
 class ViewTest extends TestCase
 {
