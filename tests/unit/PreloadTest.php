@@ -45,11 +45,11 @@ class PreloadTest extends TestCase
 
 	public function testFind(): void
 	{
-		file_put_contents(static::$tmpdir . '/test1.php', '.');
-		$this->assertFileExists(static::$tmpdir . '/test1.php');
+		file_put_contents(static::$tmpdir . DIRECTORY_SEPARATOR . 'test1.php', '.');
+		$this->assertFileExists(static::$tmpdir . DIRECTORY_SEPARATOR . 'test1.php');
 
 		$this->assertEquals(
-			static::$tmpdir . '/test1.php',
+			static::$tmpdir . DIRECTORY_SEPARATOR .'test1.php',
 			$this->Preload->find('test1.php')
 		);
 	}
@@ -64,7 +64,7 @@ class PreloadTest extends TestCase
 		$fn = 'test_' . uniqid();
 
 		file_put_contents(
-			static::$tmpdir . '/' . $fn . '.php',
+			static::$tmpdir . DIRECTORY_SEPARATOR . $fn . '.php',
 			<<<EOF
 <?php
 namespace Templator\\preload;
@@ -73,7 +73,7 @@ function $fn(): string {
 }
 EOF
 		);
-		$this->assertFileExists(static::$tmpdir . '/' . $fn . '.php');
+		$this->assertFileExists(static::$tmpdir . DIRECTORY_SEPARATOR . $fn . '.php');
 
 		$fn_name = "Templator\\preload\\$fn";
 		$this->assertFalse(function_exists($fn_name));
@@ -95,7 +95,7 @@ EOF
 		$fn = 'test_' . uniqid();
 
 		file_put_contents(
-			static::$tmpdir . '/' . $fn . '.php',
+			static::$tmpdir . DIRECTORY_SEPARATOR . $fn . '.php',
 			<<<EOF
 <?php
 namespace Templator\\preload;
@@ -104,7 +104,7 @@ function $fn(): string {
 }
 EOF
 		);
-		$this->assertFileExists(static::$tmpdir . '/' . $fn . '.php');
+		$this->assertFileExists(static::$tmpdir . DIRECTORY_SEPARATOR . $fn . '.php');
 
 		$fn_name = "Templator\\preload\\$fn";
 		$this->assertFalse(function_exists($fn_name));
@@ -126,12 +126,12 @@ EOF
 		$dir1 = 'dir_' . uniqid();
 		$dir1a = 'dir_' . uniqid();
 		$dir2 = 'dir_' . uniqid();
-		mkdir(static::$tmpdir . '/' . $dir1);
-		mkdir(static::$tmpdir . '/' . $dir1a);
-		mkdir(static::$tmpdir . '/' . $dir1 . '/' . $dir2);
+		mkdir(static::$tmpdir . DIRECTORY_SEPARATOR . $dir1);
+		mkdir(static::$tmpdir . DIRECTORY_SEPARATOR . $dir1a);
+		mkdir(static::$tmpdir . DIRECTORY_SEPARATOR . $dir1 . DIRECTORY_SEPARATOR . $dir2);
 
 		file_put_contents(
-			static::$tmpdir . '/' . $dir1 . '/' . $fn1 . '.php',
+			static::$tmpdir . DIRECTORY_SEPARATOR . $dir1 . DIRECTORY_SEPARATOR . $fn1 . '.php',
 			<<<EOF
 <?php
 namespace Templator\\preload\\$dir1;
@@ -140,10 +140,10 @@ function $fn1(): string {
 }
 EOF
 		);
-		$this->assertFileExists(static::$tmpdir . '/' . $dir1 . '/' . $fn1 . '.php');
+		$this->assertFileExists(static::$tmpdir . DIRECTORY_SEPARATOR . $dir1 . DIRECTORY_SEPARATOR . $fn1 . '.php');
 
 		file_put_contents(
-			static::$tmpdir . '/' . $dir1 . '/' . $dir2 . '/' . $fn2 . '.php',
+			static::$tmpdir . DIRECTORY_SEPARATOR . $dir1 . DIRECTORY_SEPARATOR . $dir2 . DIRECTORY_SEPARATOR . $fn2 . '.php',
 			<<<EOF
 <?php
 namespace Templator\\preload\\$dir1\\$dir2;
@@ -152,7 +152,7 @@ function $fn2(): string {
 }
 EOF
 		);
-		$this->assertFileExists(static::$tmpdir . '/' . $dir1 . '/' . $dir2 . '/' . $fn2 . '.php');
+		$this->assertFileExists(static::$tmpdir . DIRECTORY_SEPARATOR . $dir1 . DIRECTORY_SEPARATOR . $dir2 . DIRECTORY_SEPARATOR . $fn2 . '.php');
 
 		$fn1_name = "Templator\\preload\\$dir1\\$fn1";
 		$fn2_name = "Templator\\preload\\$dir1\\$dir2\\$fn2";
@@ -160,11 +160,11 @@ EOF
 		$this->assertFalse(function_exists($fn1_name));
 		$this->assertFalse(function_exists($fn2_name));
 
-		$this->Preload->preload($dir1a . '/*');
+		$this->Preload->preload($dir1a . DIRECTORY_SEPARATOR . '*');
 		$this->assertFalse(function_exists($fn1_name));
 		$this->assertFalse(function_exists($fn2_name));
 
-		$this->Preload->preload($dir1 . '/*');
+		$this->Preload->preload($dir1 . DIRECTORY_SEPARATOR . '*');
 		$this->assertTrue(function_exists($fn1_name));
 		$this->assertEquals('ok', call_user_func($fn1_name));
 		$this->assertTrue(function_exists($fn2_name));
@@ -184,7 +184,7 @@ EOF
 		$fn = 'test_' . uniqid();
 
 		file_put_contents(
-			static::$tmpdir . '/' . $fn . '.php',
+			static::$tmpdir . DIRECTORY_SEPARATOR . $fn . '.php',
 			<<<EOF
 <?php
 namespace Templator\\preload;
@@ -193,7 +193,7 @@ function $fn(): string {
 }
 EOF
 		);
-		$this->assertFileExists(static::$tmpdir . '/' . $fn . '.php');
+		$this->assertFileExists(static::$tmpdir . DIRECTORY_SEPARATOR . $fn . '.php');
 
 		$this->expectException(InvalidArgumentException::class);
 		$this->expectExceptionMessage("Not a directory '$fn.php'");

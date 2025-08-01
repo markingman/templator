@@ -14,7 +14,7 @@ class ViewTest extends TestCase
 
 	public function setUp(): void
 	{
-		if (!$path_fixtures = realpath(__DIR__ . '/../fixtures')) {
+		if (!$path_fixtures = realpath(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR .'fixtures')) {
 			throw new RuntimeException('Could not find fixtures');
 		}
 

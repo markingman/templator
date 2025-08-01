@@ -14,7 +14,7 @@ class Preload extends AbstractPathLoader implements PreloadInterface
 	public function preload(string ...$templates): void
 	{
 		foreach ($templates as $path) {
-			if (str_ends_with($path, '/*')) {
+			if (str_ends_with($path, DIRECTORY_SEPARATOR . '*')) {
 				$this->preload_dir(substr($path, 0, -2));
 			} else {
 				if ($realpath = $this->find($path)) {
@@ -28,7 +28,7 @@ class Preload extends AbstractPathLoader implements PreloadInterface
 
 	public function preload_dir(string $dir): void
 	{
-		if (!$path = realpath($this->path . '/' . $dir)) {
+		if (!$path = realpath($this->path . DIRECTORY_SEPARATOR . $dir)) {
 			throw new InvalidArgumentException("Nothing found at '$dir'");
 		}
 

@@ -20,7 +20,7 @@ trait TmpDirTestHelpersTrait
 		}
 
 		try {
-			static::$tmpdir = rtrim(sys_get_temp_dir(), '/') . '/' . bin2hex(random_bytes(4));
+			static::$tmpdir = rtrim(sys_get_temp_dir(), DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . bin2hex(random_bytes(4));
 		} catch (Throwable $e) {
 			throw new RuntimeException(message: 'Could not create tmp dir; ' . $e->getMessage());
 		}
