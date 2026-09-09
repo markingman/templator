@@ -3,5 +3,7 @@
 use Templator\View;
 
 return function (View $View): string {
-	return $View->fetch('fetch_nested2.php')('test');
+	$ret = $View->fetch('fetch_nested2.php')('test');
+
+	return is_string($ret) ? $ret : '';
 };
