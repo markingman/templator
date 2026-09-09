@@ -6,32 +6,30 @@ use LogicException;
 
 class ViewHTML extends View implements ViewHTMLInterface
 {
-	const ENT_ENTITIES = ENT_QUOTES | ENT_HTML401;
-	const ENT_CHARS = ENT_NOQUOTES | ENT_HTML401;
+	const int ENT_ENTITIES = ENT_QUOTES | ENT_HTML401;
+	const int ENT_CHARS = ENT_NOQUOTES | ENT_HTML401;
+	private const string MARKER_OPEN = "\x02";
+	private const string MARKER_CLOSE = "\x03";
 
 	public static function htmlentities(string $s): string
 	{
 		return htmlentities($s, flags: static::ENT_ENTITIES, double_encode: false);
 	}
 
-	/**
-	 * @param array<string> $t
-	 */
+	/** @param array<int, string> $t */
 	public static function htmlspecialchars(string $s, ?array $t = null, bool $strip = true): string
 	{
-		static $o = "\x02", $c = "\x03";
-
 		if (!str_contains($s, '<')) {
 			return htmlspecialchars($s, flags: static::ENT_CHARS, double_encode: false);
 		}
 
 		if ($t) {
-			if (str_contains($s, $o)) {
-				$s = str_replace($o, '', $s);
+			if (str_contains($s, self::MARKER_OPEN)) {
+				$s = str_replace(self::MARKER_OPEN, '', $s);
 			}
 
-			if (str_contains($s, $c)) {
-				$s = str_replace($c, '', $s);
+			if (str_contains($s, self::MARKER_CLOSE)) {
+				$s = str_replace(self::MARKER_CLOSE, '', $s);
 			}
 
 			if ($strip) {
@@ -39,7 +37,7 @@ class ViewHTML extends View implements ViewHTMLInterface
 			}
 
 			$s = @preg_replace(
-				'~<' . '(/*(' . implode('|', $t) . ')( [^>]*)*)' . '>~', $o . '$1' . $c, $s
+				'~<' . '(/*(' . implode('|', $t) . ')( [^>]*)*)' . '>~', self::MARKER_OPEN . '$1' . self::MARKER_CLOSE, $s
 			);
 
 			if ($s === null || preg_last_error() !== PREG_NO_ERROR) {
@@ -52,7 +50,7 @@ class ViewHTML extends View implements ViewHTMLInterface
 		$s = htmlspecialchars($s, flags: static::ENT_CHARS, double_encode: false);
 
 		if ($t) {
-			$s = str_replace([$o, $c], ['<', '>'], $s);
+			$s = str_replace([self::MARKER_OPEN, self::MARKER_CLOSE], ['<', '>'], $s);
 		}
 
 		return $s;
