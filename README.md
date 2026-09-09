@@ -1,16 +1,22 @@
 # templator
 
-Simple PHP server-side template system.
+A lightweight PHP server-side template system.
+
+## Status
+
+This is a small utility library shared for convenience. Maintenance is best-effort and may be minimal.
+
+This repository is published for use and reference. External contributions are not currently being accepted
 
 ## Installation
 
 To use, require in `composer.json`, e.g:
 
-```
+```bash
 composer require markingman/templator
 ```
 
-## Usage
+## Usage Overview
 
 Templates are set up as PHP code.
 
@@ -18,24 +24,36 @@ Templates can be closures called by the `fetch()` method, or as namespace functi
 
 Alternatively, templates could be from class methods and leverage PHP's class autoloading.
 
-For example, a closure template.
+For example, a closure template:
 
 ```php
-<?php
-
-use Templator\ViewHTML as View;
+use Templator\ViewHTML;
 
 return function(string $var, bool $val = true): string {
-	ob_start();
+	ViewHTML::ob_start();
 	?>
 
 		<?php if ($val) { ?>
-			<p><?= View::htmlspecialchars($var) ?></p>	
+			<p><?= ViewHTML::htmlspecialchars($var) ?></p>	
 		<?php } ?>
 
-		<?= View::tag('hr/', ['class' => 'rule']) ?>
+		<?= ViewHTML::tag('hr/', ['class' => 'rule']) ?>
 
 	<?php
-	return ob_get_clean();
+	return ViewHTML::ob_get_clean();
 }
 ```
+
+Using the pre-loader:
+
+```php
+$preload = new Preload('/templates/path');
+$preload->preload([
+	'Template/default_template.php',
+	'Partials/*',
+]);
+```
+
+## License
+
+This project is licensed under the MIT License.
